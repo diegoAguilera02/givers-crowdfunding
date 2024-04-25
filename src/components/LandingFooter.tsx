@@ -1,7 +1,6 @@
 import {ActionIcon, Container, createStyles, Group, rem, Stack, Text} from '@mantine/core';
 import {
     IconBrandFacebook,
-    IconBrandGithub,
     IconBrandInstagram,
     IconBrandLinkedin,
     IconBrandTwitter
