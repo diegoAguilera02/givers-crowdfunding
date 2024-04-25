@@ -18,7 +18,7 @@ import {
     TitleProps
 } from "@mantine/core";
 import AddImg from "../assets/img/add-campaign.png"
-import MoneyImg from "../assets/img/money-income.png"
+// import MoneyImg from "../assets/img/money-income.png"
 import ShareImg from "../assets/img/share-campaign.png"
 import TestimonialsSection from "../sections/Home/Testimonials";
 import {Link} from "react-router-dom";
@@ -109,7 +109,7 @@ const HowItWorksPage = (): JSX.Element => {
                             </Card>
                             <Card {...cardProps}>
                                 <Card.Section>
-                                    <Image src={MoneyImg} {...imageProps}/>
+                                    <Image src={AddImg} {...imageProps}/>
                                 </Card.Section>
                                 <Text my="sm" fw={600}>2. Share with friends</Text>
                                 <List {...listProps}>
