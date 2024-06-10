@@ -21,7 +21,7 @@ import {
     ThemeIcon,
     UnstyledButton,
 } from '@mantine/core';
-import {useDisclosure, useMediaQuery} from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
     IconAugmentedReality,
     IconCat,
@@ -35,9 +35,9 @@ import {
     IconSearch,
     IconSos,
 } from '@tabler/icons-react';
-import {useEffect, useState} from "react";
-import {BrandName, SearchDrawer} from "./index";
-import {Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BrandName, SearchDrawer } from "./index";
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -87,9 +87,8 @@ const useStyles = createStyles((theme) => ({
         marginTop: theme.spacing.sm,
         padding: `${theme.spacing.md} calc(${theme.spacing.md} * 2)`,
         paddingBottom: theme.spacing.xl,
-        borderTop: `${rem(1)} solid ${
-            theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
-        }`,
+        borderTop: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
+            }`,
     },
 
     title: {
@@ -171,11 +170,11 @@ interface IProps extends BoxProps {
     compressed?: boolean
 }
 
-const LandingNavbar = ({compressed}: IProps) => {
-    const [drawerOpened, {toggle: toggleDrawer, close: closeDrawer}] = useDisclosure(false);
-    const [linksOpened, {toggle: toggleLinks}] = useDisclosure(false);
-    const [searchOpened, {toggle: toggleSearchDrawer, close: closeSearchDrawer}] = useDisclosure(false);
-    const {classes, theme} = useStyles();
+const LandingNavbar = ({ compressed }: IProps) => {
+    const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+    const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+    const [searchOpened, { toggle: toggleSearchDrawer, close: closeSearchDrawer }] = useDisclosure(false);
+    const { classes, theme } = useStyles();
     const [stickyClass, setStickyClass] = useState(false);
     const matchesMobile = useMediaQuery('(max-width: 768px)');
 
@@ -183,7 +182,7 @@ const LandingNavbar = ({compressed}: IProps) => {
         <UnstyledButton className={classes.subLink} key={item.title}>
             <Group noWrap align="center">
                 <ThemeIcon size={34} variant="default" radius="md">
-                    <item.icon size={rem(22)} stroke={1.5} color={theme.fn.primaryColor()}/>
+                    <item.icon size={rem(22)} stroke={1.5} color={theme.fn.primaryColor()} />
                 </ThemeIcon>
                 <div>
                     <Text size="sm" fw={500}>
@@ -236,10 +235,10 @@ const LandingNavbar = ({compressed}: IProps) => {
                     backdropFilter: 'blur(4px)',
                     borderRadius: stickyClass ? 0 : theme.radius.sm
                 }}>
-                <Container size="lg" fluid={compressed} sx={{height: '100%'}}>
-                    <Flex justify="space-between" align="center" sx={{height: '100%'}}>
-                        <BrandName size={28} asLink/>
-                        <Flex align="center" gap="xs" sx={{height: '100%'}} className={classes.hiddenMobile}>
+                <Container size="lg" fluid={compressed} sx={{ height: '100%' }}>
+                    <Flex justify="space-between" align="center" sx={{ height: '100%' }}>
+                        <BrandName size={28} asLink />
+                        <Flex align="center" gap="xs" sx={{ height: '100%' }} className={classes.hiddenMobile}>
                             <Button component={Link} to="/how-it-works" className={classes.link} {...buttonProps}>
                                 Cómo funciona
                             </Button>
@@ -253,12 +252,12 @@ const LandingNavbar = ({compressed}: IProps) => {
                                             <Box component="span" mr={5}>
                                                 Invertir
                                             </Box>
-                                            <IconChevronDown size={18} className={classes.linkIcon}/>
+                                            <IconChevronDown size={18} className={classes.linkIcon} />
                                         </Center>
                                     </a>
                                 </HoverCard.Target>
 
-                                <HoverCard.Dropdown sx={{overflow: 'hidden'}}>
+                                <HoverCard.Dropdown sx={{ overflow: 'hidden' }}>
                                     <Group position="apart" px="md">
                                         <Text fw={500} color="dark">Categorías</Text>
                                         <Button variant="default">Ver todo</Button>
@@ -276,7 +275,7 @@ const LandingNavbar = ({compressed}: IProps) => {
                                 </HoverCard.Dropdown>
                             </HoverCard>
                             <Button
-                                leftIcon={<IconSearch size={18} className={classes.linkIcon}/>}
+                                leftIcon={<IconSearch size={18} className={classes.linkIcon} />}
                                 onClick={toggleSearchDrawer}
                                 className={classes.link}
                                 {...buttonProps}
@@ -290,7 +289,7 @@ const LandingNavbar = ({compressed}: IProps) => {
                                 Mi dashboard
                             </Button>
                         </Flex>
-                        <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop}/>
+                        <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
                     </Flex>
                 </Container>
             </Header>
@@ -305,15 +304,15 @@ const LandingNavbar = ({compressed}: IProps) => {
                 zIndex={1000000}
             >
                 <ScrollArea h={`calc(100vh - ${rem(0)})`} mx="-md">
-                    <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}/>
+                    <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
-                    <Button component={Link} to="/" className={classes.link} {...buttonProps}>
+                    <Button onClick={() => closeDrawer()} component={Link} to="/" className={classes.link} {...buttonProps}>
                         Home
                     </Button>
-                    <Button component={Link} to="/how-it-works" className={classes.link} {...buttonProps}>
+                    <Button onClick={() => closeDrawer()} component={Link} to="/how-it-works" className={classes.link} {...buttonProps}>
                         Cómo funciona
                     </Button>
-                    <Button component={Link} to="/campaigns" className={classes.link} {...buttonProps}>
+                    <Button onClick={() => closeDrawer()} component={Link} to="/campaigns" className={classes.link} {...buttonProps}>
                         Campañas
                     </Button>
                     <UnstyledButton className={classes.link} onClick={toggleLinks}>
@@ -321,7 +320,7 @@ const LandingNavbar = ({compressed}: IProps) => {
                             <Box component="span" mr={5}>
                                 Invertir
                             </Box>
-                            <IconChevronDown size={16} className={classes.linkIcon}/>
+                            <IconChevronDown size={16} className={classes.linkIcon} />
                         </Center>
                     </UnstyledButton>
                     <Collapse in={linksOpened}>{links}</Collapse>
@@ -333,7 +332,7 @@ const LandingNavbar = ({compressed}: IProps) => {
                         Mi dashboard
                     </Button>
                     <Button
-                        leftIcon={<IconSearch size={18}/>}
+                        leftIcon={<IconSearch size={18} />}
                         onClick={() => {
                             closeDrawer()
                             toggleSearchDrawer();
@@ -346,7 +345,7 @@ const LandingNavbar = ({compressed}: IProps) => {
                 </ScrollArea>
             </Drawer>
 
-            <SearchDrawer opened={searchOpened} onClose={closeSearchDrawer}/>
+            <SearchDrawer opened={searchOpened} onClose={closeSearchDrawer} />
         </Box>
     );
 }
