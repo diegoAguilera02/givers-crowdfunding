@@ -39,8 +39,6 @@ import { useEffect, useState } from "react";
 import { BrandName, SearchDrawer } from "./index";
 import { Link } from "react-router-dom";
 
-
-
 const useStyles = createStyles((theme) => ({
     link: {
         display: 'flex',
