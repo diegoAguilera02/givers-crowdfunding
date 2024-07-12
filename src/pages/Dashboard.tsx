@@ -26,6 +26,8 @@ import {
 import { CampaignsTable, DonatorsTable, YearlyDonationChart } from "../components";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+import { DashboardLayout } from "../layout";
+import GiversLayout from "../layout/GiversLayout";
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -68,7 +70,7 @@ const DashboardPage = () => {
     }
 
     return (
-        <>
+        <GiversLayout>
             <Helmet>
                 <title>Dashboard</title>
             </Helmet>
@@ -203,7 +205,7 @@ const DashboardPage = () => {
                     </Stack>
                 </Container>
             </Box>
-        </>
+        </GiversLayout>
     );
 };
 

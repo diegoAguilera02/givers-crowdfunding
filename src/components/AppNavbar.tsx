@@ -15,7 +15,7 @@ import {
     Text,
     UnstyledButton,
 } from '@mantine/core';
-import {useDisclosure, useMediaQuery} from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
     IconBell,
     IconChevronDown,
@@ -26,8 +26,9 @@ import {
     IconSettings,
     IconStar,
 } from '@tabler/icons-react';
-import {useState} from "react";
-import {AppLinks, BrandName, SearchDrawer} from "./index";
+import { useContext, useState } from "react";
+import { AppLinks, BrandName, SearchDrawer } from "./index";
+import { AuthContext } from '../context/auth/AuthContext';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -96,9 +97,8 @@ const useStyles = createStyles((theme) => ({
         marginTop: theme.spacing.sm,
         padding: `${theme.spacing.md} calc(${theme.spacing.md} * 2)`,
         paddingBottom: theme.spacing.xl,
-        borderTop: `${rem(1)} solid ${
-            theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
-        }`,
+        borderTop: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
+            }`,
     },
 
     title: {
@@ -141,27 +141,29 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-const user = {
-    "name": "Jane Spoonfighter",
-    "email": "janspoon@fighter.dev",
-    "image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-}
+// const user = {
+//     "name": "Jane Spoonfighter",
+//     "email": "janspoon@fighter.dev",
+//     "image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
+// }
 
 const ICON_SIZE = 18
 
 type IProps = BoxProps
 
-const AppNavbar = ({...others}: IProps) => {
-    const {classes, theme, cx} = useStyles();
+const AppNavbar = ({ ...others }: IProps) => {
+
+    const { user } = useContext(AuthContext);
+    const { classes, theme, cx } = useStyles();
     const [userMenuOpened, setUserMenuOpened] = useState(false);
-    const [drawerOpened, {toggle: toggleDrawer, close: closeDrawer}] = useDisclosure(false);
-    const [searchOpened, {toggle: toggleSearchDrawer, close: closeSearchDrawer}] = useDisclosure(false);
+    const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+    const [searchOpened, { toggle: toggleSearchDrawer, close: closeSearchDrawer }] = useDisclosure(false);
     const matchesMobile = useMediaQuery('(max-width: 600px)');
 
     return (
         <Box {...others}>
             <Header
-                height={{base: 50, md: 70}}
+                height={{ base: 50, md: 70 }}
                 className={classes.header}
             >
                 <Container
@@ -179,7 +181,7 @@ const AppNavbar = ({...others}: IProps) => {
                         color="white"
                     />
 
-                    <Group position="apart" sx={{width: '100%'}}>
+                    <Group position="apart" sx={{ width: '100%' }}>
                         <Group>
                             <BrandName
                                 size={24}
@@ -187,40 +189,40 @@ const AppNavbar = ({...others}: IProps) => {
                                 asLink
                                 variant="grayscale"
                             />
-                            <AppLinks className={classes.hiddenMobile}/>
+                            <AppLinks className={classes.hiddenMobile} />
                         </Group>
                         <Group>
                             <ActionIcon variant="filled" color={theme.white} onClick={toggleSearchDrawer}>
-                                <IconSearch size={ICON_SIZE}/>
+                                <IconSearch size={ICON_SIZE} />
                             </ActionIcon>
                             <ActionIcon variant="filled" color={theme.white}>
-                                <IconBell size={ICON_SIZE}/>
+                                <IconBell size={ICON_SIZE} />
                             </ActionIcon>
                             <Menu
                                 width={260}
                                 position="bottom-end"
-                                transitionProps={{transition: 'pop-top-right'}}
+                                transitionProps={{ transition: 'pop-top-right' }}
                                 onClose={() => setUserMenuOpened(false)}
                                 onOpen={() => setUserMenuOpened(true)}
                                 withinPortal
                             >
                                 <Menu.Target>
                                     <UnstyledButton
-                                        className={cx(classes.user, {[classes.userActive]: userMenuOpened})}
+                                        className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
                                     >
                                         <Group spacing={7}>
                                             <Avatar
                                                 src={user.image}
-                                                alt={user.name}
+                                                alt={user?.name}
                                                 radius="xl"
                                                 size={matchesMobile ? 18 : 20}
                                             />
                                             {!matchesMobile &&
                                                 <>
-                                                    <Text weight={500} size="sm" sx={{lineHeight: 1}} mr={3}>
-                                                        {user.name}
+                                                    <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
+                                                        {user?.name}
                                                     </Text>
-                                                    <IconChevronDown size={rem(12)} stroke={1.5}/>
+                                                    <IconChevronDown size={rem(12)} stroke={1.5} />
                                                 </>}
                                         </Group>
                                     </UnstyledButton>
@@ -239,7 +241,7 @@ const AppNavbar = ({...others}: IProps) => {
                                         icon={<IconStar
                                             size="0.9rem"
                                             color={theme.colors.yellow[6]}
-                                            stroke={1.5}/>}
+                                            stroke={1.5} />}
                                     >
                                         Publicaciones Guardadas
                                     </Menu.Item>
@@ -247,17 +249,17 @@ const AppNavbar = ({...others}: IProps) => {
                                         icon={<IconMessage
                                             size="0.9rem"
                                             color={theme.colors.blue[6]}
-                                            stroke={1.5}/>}
+                                            stroke={1.5} />}
                                     >
                                         Tus Comentarios
                                     </Menu.Item>
 
                                     <Menu.Label>Ajustes</Menu.Label>
-                                    <Menu.Item icon={<IconSettings size="0.9rem" stroke={1.5}/>}>
+                                    <Menu.Item icon={<IconSettings size="0.9rem" stroke={1.5} />}>
                                         Ajustes de Cuenta
                                     </Menu.Item>
                                     <Menu.Item
-                                        icon={<IconLogout size="0.9rem" stroke={1.5}/>}>Cerrar Sessión</Menu.Item>
+                                        icon={<IconLogout size="0.9rem" stroke={1.5} />}>Cerrar Sessión</Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
                         </Group>
@@ -272,15 +274,15 @@ const AppNavbar = ({...others}: IProps) => {
                 padding="md"
                 title="Navigation"
                 className={classes.hiddenDesktop}
-                classNames={{header: classes.drawerHeader, close: classes.close}}
+                classNames={{ header: classes.drawerHeader, close: classes.close }}
                 zIndex={1000000}
             >
-                <ScrollArea h={`calc(100vh - ${rem(0)})`} mx="-md" sx={{backgroundColor: theme.colors.primary[6]}}>
-                    <AppLinks direction='column'/>
+                <ScrollArea h={`calc(100vh - ${rem(0)})`} mx="-md" sx={{ backgroundColor: theme.colors.primary[6] }}>
+                    <AppLinks direction='column' />
                 </ScrollArea>
             </Drawer>
 
-            <SearchDrawer opened={searchOpened} onClose={closeSearchDrawer}/>
+            <SearchDrawer opened={searchOpened} onClose={closeSearchDrawer} />
         </Box>
     );
 }

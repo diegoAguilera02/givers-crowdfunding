@@ -14,7 +14,7 @@ import {
 import {Helmet} from "react-helmet";
 import {IconBrandFacebook, IconBrandGoogle} from "@tabler/icons-react";
 
-const SignupPage = () => {
+const RegisterPage = () => {
     return (
         <>
             <Helmet>
@@ -58,4 +58,4 @@ const SignupPage = () => {
     );
 }
 
-export default SignupPage;
+export default RegisterPage;

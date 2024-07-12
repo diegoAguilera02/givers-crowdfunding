@@ -5,7 +5,7 @@ import CampaignsPage from "./Campaigns";
 import CampaignDetailsPage from "./CampaignDetails";
 import DetailError404Page from "./DetailError404";
 import LoginPage from "./Login";
-import SignupPage from "./Signup";
+import SignupPage from "./Register.tsx";
 import DashboardPage from "./Dashboard";
 import CreateCampaignPage from "./CreateCampaign";
 

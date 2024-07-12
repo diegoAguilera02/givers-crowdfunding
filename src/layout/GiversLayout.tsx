@@ -1,8 +1,7 @@
 import {AppShell, useMantineTheme} from '@mantine/core';
-import {Outlet} from 'react-router-dom'
 import {AppNavbar} from "../components";
 
-const DashboardLayout = () => {
+const GiversLayout = ({ children }) => {
     const theme = useMantineTheme();
 
     return (
@@ -18,10 +17,10 @@ const DashboardLayout = () => {
                 navbar={<></>}
                 header={<AppNavbar/>}
             >
-                <Outlet/>
+                {children}
             </AppShell>
         </>
     );
 }
 
-export default DashboardLayout;
+export default GiversLayout;
