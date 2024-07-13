@@ -26,8 +26,10 @@ import {
 import { CampaignsTable, DonatorsTable, YearlyDonationChart } from "../components";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { DashboardLayout } from "../layout";
+// import { DashboardLayout } from "../layout";
 import GiversLayout from "../layout/GiversLayout";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth/AuthContext";
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -56,7 +58,11 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
+
+
 const DashboardPage = () => {
+
+    const { user } = useContext(AuthContext)
     const { classes } = useStyles();
 
     const paperProps: PaperProps = {
@@ -77,7 +83,7 @@ const DashboardPage = () => {
             <Box>
                 <Container fluid my="xl">
                     <Stack spacing="xl">
-                        <Title order={3}>Good evening, Jane</Title>
+                        <Title order={3}>Hola, {user.name}</Title>
                         <SimpleGrid
                             cols={4}
                             breakpoints={[{ maxWidth: 'md', cols: 2, spacing: 'md' }, {
@@ -89,7 +95,7 @@ const DashboardPage = () => {
                             <Paper {...paperProps}>
                                 <Group position="apart">
                                     <Text size="xs" color="dimmed" className={classes.title}>
-                                        Total Donations
+                                        Donaciones Totales
                                     </Text>
                                     <IconReceipt2 className={classes.icon} size="1.4rem" stroke={1.5} />
                                 </Group>
@@ -171,6 +177,8 @@ const DashboardPage = () => {
                                 </Text>
                             </Paper>
                         </SimpleGrid>
+
+                        {/* Campaigns Table */}
                         <Paper {...paperProps}>
                             <Card.Section mb="lg">
                                 <Flex align="center" justify="space-between">
@@ -181,7 +189,7 @@ const DashboardPage = () => {
                                     <Button
                                         leftIcon={<IconPlus size={18} />}
                                         component={Link}
-                                        to="/create-campaign"
+                                        to="/panel/create-campaign"
                                     >
                                         Crear una campaña
                                     </Button>
@@ -191,6 +199,30 @@ const DashboardPage = () => {
                                 <CampaignsTable />
                             </Card.Section>
                         </Paper>
+
+                        {/* Foundations Table */}
+                        <Paper {...paperProps}>
+                            <Card.Section mb="lg">
+                                <Flex align="center" justify="space-between">
+                                    <Box>
+                                        <Title {...subTitleProps}>Fundaciones</Title>
+                                        <Text size="sm">Gestiona tus fundaciones</Text>
+                                    </Box>
+                                    <Button
+                                        leftIcon={<IconPlus size={18} />}
+                                        component={Link}
+                                        to="/panel/create-foundation"
+                                    >
+                                        Crear una fundación
+                                    </Button>
+                                </Flex>
+                            </Card.Section>
+                            <Card.Section>
+                                <CampaignsTable />
+                            </Card.Section>
+                        </Paper>
+
+                        {/* Donators Table */}
                         <Paper {...paperProps}>
                             <Card.Section>
                                 <Title {...subTitleProps}>Top Colaboradores</Title>
@@ -198,10 +230,12 @@ const DashboardPage = () => {
                             </Card.Section>
                             <Card.Section></Card.Section>
                         </Paper>
-                        <Paper {...paperProps}>
+
+                        {/* Yearly Donation Chart */}
+                        {/* <Paper {...paperProps}>
                             <Title {...subTitleProps}>Donaciones por categoría</Title>
                             <YearlyDonationChart />
-                        </Paper>
+                        </Paper> */}
                     </Stack>
                 </Container>
             </Box>

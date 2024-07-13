@@ -1,13 +1,13 @@
-import {forwardRef} from 'react';
+import { forwardRef } from 'react';
 import countriesData from "../data/Countries.json";
-import {Avatar, Group, Select, Text} from "@mantine/core";
-import {ICountry} from "../types";
+import { Avatar, Group, Select, Text } from "@mantine/core";
+import { ICountry } from "../types";
 
 const CountrySelectItem = forwardRef<HTMLDivElement, ICountry>(
-    ({image, name, code, ...others}: ICountry, ref) => (
+    ({ image, name, code, ...others }: ICountry, ref) => (
         <div ref={ref} {...others}>
             <Group noWrap>
-                <Avatar src={image}/>
+                <Avatar src={image} />
 
                 <div>
                     <Text size="sm">{name}</Text>
@@ -20,12 +20,18 @@ const CountrySelectItem = forwardRef<HTMLDivElement, ICountry>(
     )
 );
 
-const CountrySelect = () => {
+
+interface Props {
+    handleSelectCountry: (name: string) => void;
+}
+
+const CountrySelect = ({ handleSelectCountry }: Props) => {
     return (
         <Select
             label="Country"
             itemComponent={CountrySelectItem}
-            data={countriesData.data.map(c => ({value: c.name, label: c.name, ...c}))}
+            data={countriesData.data.map(c => ({ value: c.name, label: c.name, ...c }))}
+            onSelect={(value) => handleSelectCountry(value.target.value)}
             searchable
             clearable
             maxDropdownHeight={300}

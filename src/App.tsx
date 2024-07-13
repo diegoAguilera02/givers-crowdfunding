@@ -4,8 +4,6 @@ import { customTheme } from "./theme";
 import MontserratFont from "./fonts/MontserratFont";
 
 import './App.css'
-import { RouterProvider } from "react-router-dom";
-import router from "./routes";
 import { AppRouter } from "./routes/AppRouter";
 
 function App() {

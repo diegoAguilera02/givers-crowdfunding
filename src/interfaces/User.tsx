@@ -1,4 +1,5 @@
 export interface User {
+    googleUID?: string;
     rut?: string;
     checkDigit?: string;
     name: string;
@@ -6,5 +7,6 @@ export interface User {
     lastnameMaternal?: string;
     email: string;
     profile: string;
+    photoURL?: string;
     status: boolean;
 }

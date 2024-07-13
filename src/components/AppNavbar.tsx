@@ -29,6 +29,7 @@ import {
 import { useContext, useState } from "react";
 import { AppLinks, BrandName, SearchDrawer } from "./index";
 import { AuthContext } from '../context/auth/AuthContext';
+import { logoutFirebase } from '../firebase/providers';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -153,7 +154,7 @@ type IProps = BoxProps
 
 const AppNavbar = ({ ...others }: IProps) => {
 
-    const { user } = useContext(AuthContext);
+    const { user, startLogout } = useContext(AuthContext);
     const { classes, theme, cx } = useStyles();
     const [userMenuOpened, setUserMenuOpened] = useState(false);
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
@@ -259,7 +260,11 @@ const AppNavbar = ({ ...others }: IProps) => {
                                         Ajustes de Cuenta
                                     </Menu.Item>
                                     <Menu.Item
-                                        icon={<IconLogout size="0.9rem" stroke={1.5} />}>Cerrar Sessión</Menu.Item>
+                                        icon={<IconLogout size="0.9rem" stroke={1.5} />}
+                                        onClick={startLogout}
+                                    >
+                                        Cerrar Sesión
+                                    </Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
                         </Group>
@@ -272,7 +277,7 @@ const AppNavbar = ({ ...others }: IProps) => {
                 onClose={closeDrawer}
                 size="100%"
                 padding="md"
-                title="Navigation"
+                title="Panel de Navagación"
                 className={classes.hiddenDesktop}
                 classNames={{ header: classes.drawerHeader, close: classes.close }}
                 zIndex={1000000}

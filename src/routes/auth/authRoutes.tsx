@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import LoginPage from "../../pages/Login";
-import RegisterPage from "../../pages/Register";
+import LoginPage from "../../pages/auth/Login";
+import RegisterPage from "../../pages/auth/Register";
 import { CampaignsPage, HowItWorksPage } from "../../pages";
 
 

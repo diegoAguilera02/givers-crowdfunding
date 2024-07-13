@@ -299,7 +299,7 @@ const LandingNavbar = ({ compressed }: IProps) => {
                 onClose={closeDrawer}
                 size="100%"
                 padding="md"
-                title="Navigation"
+                title="Panel de Navagación"
                 className={classes.hiddenDesktop}
                 zIndex={1000000}
             >

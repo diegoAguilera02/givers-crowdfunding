@@ -67,71 +67,32 @@ interface ISocialProps {
     title: React.ReactNode;
 }
 
-const SocialSelectItem = forwardRef<HTMLDivElement, ISocialProps>(
-    ({ title, icon: Icon, ...others }: ISocialProps, ref) => (
-        <div ref={ref} {...others}>
-            <Group noWrap>
-                <Icon size={18} stroke={1.5} />
-                <Text size="sm" transform="capitalize">{title}</Text>
-            </Group>
-        </div>
-    )
-);
+const CreateFoundationPage = () => {
 
-const CreateCampaignPage = () => {
+    const [formValues, setFormValues] = useState<{ name: string; city: string, address: string, confidenceLevel: number, fono: string, responsible: string }>({
+        name: '',
+        city: '',
+        address: '',
+        confidenceLevel: 0,
+        fono: '',
+        responsible: '',
+    });
+
+    const [countrySelect, setCountrySelect] = useState<string>('');
+
+
+
     const theme = useMantineTheme()
     const [active, setActive] = useState(0);
     const [target, setTarget] = useState('deadline');
     const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
     const [donationType, setDonationType] = useState('any');
     const [minimumCheck, setMinimumCheck] = useState(false);
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Underline,
-            Link,
-            Superscript,
-            SubScript,
-            Highlight,
-            TextAlign.configure({ types: ['heading', 'paragraph'] }),
-        ],
-        content: '',
-    });
 
-    const socialForm = useForm({
-        initialValues: {
-            employees: [{ name: '', active: false, key: randomId() }],
-        },
-    });
 
     const nextStep = () => setActive((current: number) => (current < 4 ? current + 1 : current));
     const prevStep = () => setActive((current: number) => (current > 0 ? current - 1 : current));
 
-    const socialFields = socialForm.values.employees.map((item, index) => (
-        <Group key={item.key} mt="xs">
-            <Select
-                aria-label="social"
-                data={
-                    [
-                        { title: 'Facebook', icon: IconBrandFacebook },
-                        { title: 'Whatsapp', icon: IconBrandWhatsapp },
-                        { title: 'LinkedIn', icon: IconBrandLinkedin },
-                        { title: 'Twitter', icon: IconBrandTwitter },
-                        { title: 'Youtube', icon: IconBrandYoutube },
-                        { title: 'Other links', icon: IconLink },
-                    ].map(c => ({ value: c.title, label: c.title, ...c }))}
-                itemComponent={SocialSelectItem}
-            />
-            <TextInput
-                placeholder="https://"
-                sx={{ flex: 1 }}
-                {...socialForm.getInputProps(`employees.${index}.name`)}
-            />
-            <ActionIcon color="red" onClick={() => socialForm.removeListItem('employees', index)}>
-                <IconTrash size="1rem" />
-            </ActionIcon>
-        </Group>
-    ));
 
     const titleProps: TitleProps = {
         size: 24,
@@ -151,17 +112,21 @@ const CreateCampaignPage = () => {
         sx: { backgroundColor: theme.white }
     }
 
+    const handleSelectCountry = (name: string) => {
+        setCountrySelect(name);
+    }
+
     return (
         <>
             <Helmet>
-                <title>Crear Campaña</title>
+                <title>Crear Fundación</title>
             </Helmet>
             <Box>
                 <Container my={36}>
-                    <Title mb="xl" align="center">Crea tu campaña</Title>
+                    <Title mb="xl" align="center">Crea una fundación</Title>
 
                     <div>
-                        <Title {...titleProps}>Información Campaña</Title>
+                        <Title {...titleProps}>Información Fundación</Title>
                         <Paper {...paperProps}>
                             <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
                                 <TextInput label="Titulo" />
@@ -174,11 +139,11 @@ const CreateCampaignPage = () => {
                                 (typically where you&apos;re resident). This helps match you to the correct payment
                                 processors.</Text>
                             <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                                <CountrySelect />
+                                <CountrySelect handleSelectCountry={handleSelectCountry} />
                                 <TextInput label="Ciudad" placeholder="city" />
                             </SimpleGrid>
                         </Paper>
-                        <Paper {...paperProps}>
+                        {/* <Paper {...paperProps}>
                             <Stack spacing="sm">
                                 <Title {...subTitleProps}>Información de Donación</Title>
                                 <CurrencySelect />
@@ -228,8 +193,8 @@ const CreateCampaignPage = () => {
                                         </Stack>}
                                 </Paper>
                             </Stack>
-                        </Paper>
-                        <Paper {...paperProps}>
+                        </Paper> */}
+                        {/* <Paper {...paperProps}>
                             <Title {...subTitleProps}>Tipo de donación</Title>
                             <SegmentedControl
                                 size="md"
@@ -249,8 +214,8 @@ const CreateCampaignPage = () => {
                                 label="Would you like your fundraising page shown in more than one language?"
                                 mt="sm"
                             />
-                        </Paper>
-                        <Paper {...paperProps}>
+                        </Paper> */}
+                        {/* <Paper {...paperProps}>
                             <Stack spacing="sm">
                                 <Title {...subTitleProps}>Fund & Registration details</Title>
                                 <Text size="sm">*Name of the person receiving funds. For organizations, the legal
@@ -273,7 +238,7 @@ const CreateCampaignPage = () => {
                                     </>
                                 } />
                             </Stack>
-                        </Paper>
+                        </Paper> */}
 
                         <Card.Section mb="lg">
                             <Flex align="center" justify="center">
@@ -291,7 +256,7 @@ const CreateCampaignPage = () => {
                                     component={LinkRouter}
                                     onClick={() => console.log('press')}
                                 >
-                                    Crear una campaña
+                                    Crear una fundación
                                 </Button>
                             </Flex>
                         </Card.Section>
@@ -302,4 +267,4 @@ const CreateCampaignPage = () => {
     );
 };
 
-export default CreateCampaignPage;
+export default CreateFoundationPage;
