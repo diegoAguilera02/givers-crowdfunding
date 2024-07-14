@@ -36,19 +36,21 @@ export const AuthProvider: React.FC = ({ children }: any) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(FirebaseAuth, (authUser) => {
-            dispatch({
-                type: "auth",
-                payload: {
-                    user: {
-                        googleUID: authUser?.uid,
-                        name: authUser?.displayName,
-                        email: authUser?.email,
-                        status: true,
-                        profile: 'Client',
-                        photoURL: authUser?.photoURL
+            if (authUser) {
+                dispatch({
+                    type: "auth",
+                    payload: {
+                        user: {
+                            googleUID: authUser?.uid,
+                            name: authUser?.displayName,
+                            email: authUser?.email,
+                            status: true,
+                            profile: 'Client',
+                            photoURL: authUser?.photoURL
+                        }
                     }
-                }
-            });
+                });
+            }
             setLoading(false);
         });
 
@@ -69,12 +71,11 @@ export const AuthProvider: React.FC = ({ children }: any) => {
             // console.log('Error', result.errorMessage);
         }
 
-        const { uid, displayName, email, photoURL } = result.user;
+        const { displayName, email, photoURL } = result.user;
 
 
         // Format user data
         const userData = {
-            googleUID: uid,
             name: displayName,
             email,
             photoURL
@@ -163,7 +164,6 @@ export const AuthProvider: React.FC = ({ children }: any) => {
             type: "auth",
             payload: {
                 user: {
-                    googleUID: uid,
                     name: displayName,
                     email: userEmail,
                     status: true,

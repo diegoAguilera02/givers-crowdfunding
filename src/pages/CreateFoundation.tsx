@@ -25,47 +25,15 @@ import {
     TitleProps,
     useMantineTheme
 } from "@mantine/core";
-import { Link, RichTextEditor } from '@mantine/tiptap';
-import { useEditor } from '@tiptap/react';
-import Highlight from '@tiptap/extension-highlight';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Superscript from '@tiptap/extension-superscript';
-import SubScript from '@tiptap/extension-subscript';
-import React, { forwardRef, useState } from "react";
-import { DateInput } from "@mantine/dates";
+import React, { useState } from "react";
+
 import {
-    IconBrandApple,
-    IconBrandFacebook,
-    IconBrandGoogle,
-    IconBrandLinkedin,
-    IconBrandPaypal,
-    IconBrandTwitter,
-    IconBrandWhatsapp,
-    IconBrandYoutube,
-    IconCalendar,
-    IconCheck,
-    IconChevronLeft,
-    IconChevronRight,
-    IconCurrency,
-    IconCurrencyDollar,
-    IconInfoCircleFilled,
-    IconLink,
-    IconMail,
-    IconPlus,
-    IconTrash
+    IconPlus
 } from "@tabler/icons-react";
-import { CategorySelect, CountrySelect, CurrencySelect, FileDropzone } from "../components";
-import { randomId } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
+import { CategorySelect, CountrySelect } from "../components";
 
 import { Link as LinkRouter } from "react-router-dom";
-
-interface ISocialProps {
-    icon: React.FC<any>;
-    title: React.ReactNode;
-}
+import GooglePlace from "../components/Place";
 
 const CreateFoundationPage = () => {
 
@@ -83,15 +51,15 @@ const CreateFoundationPage = () => {
 
 
     const theme = useMantineTheme()
-    const [active, setActive] = useState(0);
-    const [target, setTarget] = useState('deadline');
-    const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
-    const [donationType, setDonationType] = useState('any');
-    const [minimumCheck, setMinimumCheck] = useState(false);
+    // const [active, setActive] = useState(0);
+    // const [target, setTarget] = useState('deadline');
+    // const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
+    // const [donationType, setDonationType] = useState('any');
+    // const [minimumCheck, setMinimumCheck] = useState(false);
 
 
-    const nextStep = () => setActive((current: number) => (current < 4 ? current + 1 : current));
-    const prevStep = () => setActive((current: number) => (current > 0 ? current - 1 : current));
+    // const nextStep = () => setActive((current: number) => (current < 4 ? current + 1 : current));
+    // const prevStep = () => setActive((current: number) => (current > 0 ? current - 1 : current));
 
 
     const titleProps: TitleProps = {
@@ -134,13 +102,14 @@ const CreateFoundationPage = () => {
                             </SimpleGrid>
                         </Paper>
                         <Paper {...paperProps}>
-                            <Title {...subTitleProps}>Campaign location</Title>
-                            <Text size="sm" mb="sm">Please select the country that we&apos;ll be sending funds to
-                                (typically where you&apos;re resident). This helps match you to the correct payment
-                                processors.</Text>
-                            <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+                            <Title {...subTitleProps}>Localización campaña</Title>
+                            <Text size="sm" mb="sm">
+                                Seleccione el país al que enviaremos los fondos (normalmente, donde reside).
+                            </Text>
+                            <SimpleGrid cols={1} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
                                 <CountrySelect handleSelectCountry={handleSelectCountry} />
-                                <TextInput label="Ciudad" placeholder="city" />
+                                <TextInput label="Ciudad" placeholder="Antofagasta" />
+                                <GooglePlace />
                             </SimpleGrid>
                         </Paper>
                         {/* <Paper {...paperProps}>

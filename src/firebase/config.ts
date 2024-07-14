@@ -15,13 +15,13 @@ interface FirebaseConfig {
 }
 
 const firebaseConfig: FirebaseConfig = {
-  apiKey: "AIzaSyA6yHsUD5q96h5MTgzXRQkVK6Es_sX58Sg",
-  authDomain: "givers-48277.firebaseapp.com",
-  projectId: "givers-48277",
-  storageBucket: "givers-48277.appspot.com",
-  messagingSenderId: "424043764291",
-  appId: "1:424043764291:web:f9bb69c8d404e5998092f6",
-  measurementId: "G-0HYR079WKV"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase

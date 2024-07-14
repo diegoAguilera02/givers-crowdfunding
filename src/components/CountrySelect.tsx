@@ -28,7 +28,7 @@ interface Props {
 const CountrySelect = ({ handleSelectCountry }: Props) => {
     return (
         <Select
-            label="Country"
+            label="País"
             itemComponent={CountrySelectItem}
             data={countriesData.data.map(c => ({ value: c.name, label: c.name, ...c }))}
             onSelect={(value) => handleSelectCountry(value.target.value)}
