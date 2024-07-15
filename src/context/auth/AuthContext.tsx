@@ -3,7 +3,7 @@ import { AuthState, authReducer } from "./authReducer";
 
 import { signInWithGoogle, loginWithEmailAndPassword, logoutFirebase } from "../../firebase/providers";
 import { User } from '../../interfaces/User';
-import { addDocument } from "../../firebase/service";
+import { addDocument, checkIfDocumentExists, getUserByUid } from "../../firebase/service";
 import { AuthResponse } from "../../interfaces/AuthResponse";
 import { registerUserWithEmailAndPassword } from "../../firebase/providers";
 import { onAuthStateChanged } from "firebase/auth";
@@ -35,18 +35,21 @@ export const AuthProvider: React.FC = ({ children }: any) => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(FirebaseAuth, (authUser) => {
+        const unsubscribe = onAuthStateChanged(FirebaseAuth, async (authUser) => {
             if (authUser) {
+
+                const user = await getUserByUid(authUser.uid);
+
                 dispatch({
                     type: "auth",
                     payload: {
                         user: {
-                            googleUID: authUser?.uid,
-                            name: authUser?.displayName,
-                            email: authUser?.email,
-                            status: true,
-                            profile: 'Client',
-                            photoURL: authUser?.photoURL
+                            uid: user.uid,
+                            name: user.name,
+                            email: user.email,
+                            status: user.status,
+                            profile: user.profile,
+                            photoURL: user.photoURL
                         }
                     }
                 });
@@ -71,32 +74,48 @@ export const AuthProvider: React.FC = ({ children }: any) => {
             // console.log('Error', result.errorMessage);
         }
 
-        const { displayName, email, photoURL } = result.user;
-
+        const { uid, displayName, email, photoURL } = result.user;
 
         // Format user data
         const userData = {
+            uid,
             name: displayName,
             email,
+            status: true,
+            profile: 'Client',
             photoURL
         }
 
-        // Save user in the DB
-        await addDocument('users', userData);
+        // Search user in the DB with the uid
+        const existUser = await checkIfDocumentExists('users', 'uid', uid);
+
+        if (!existUser) {
+            // Save user in the DB
+            await addDocument('users', userData);
+            return dispatch({
+                type: "auth",
+                payload: {
+                    user: userData
+                }
+            });
+        }
+
+        const user = await getUserByUid(userData.uid);
 
         return dispatch({
             type: "auth",
             payload: {
                 user: {
-                    googleUID: uid,
-                    name: displayName,
-                    email,
-                    status: true,
-                    profile: 'Client',
-                    photoURL
+                    uid: user.uid,
+                    name: user.name,
+                    email: user.email,
+                    status: user.status,
+                    profile: user.profile,
+                    photoURL: user.photoURL
                 }
             }
         });
+
     }
 
     const startCreatingUserWithEmailAndPassword = async (name: string, email: string, password: string): Promise<AuthResponse> => {
@@ -113,41 +132,58 @@ export const AuthProvider: React.FC = ({ children }: any) => {
             };
         }
 
-
         // Format user data
         const userData = {
-            googleUID: uid,
+            uid,
             name: displayName,
             email: userEmail,
+            status: true,
+            profile: 'Client',
             photoURL
         }
 
-        // Save user in the DB
-        await addDocument('users', userData);
+        // Search user in the DB with the uid
+        const existUser = await checkIfDocumentExists('users', 'uid', uid);
 
-        // TODO: Call to dispatch to save user in the state
+        if (!existUser) {
+            // Save user in the DB
+            await addDocument('users', userData);
+            dispatch({
+                type: "auth",
+                payload: {
+                    user: userData
+                }
+            });
+
+            return {
+                success: true
+            }
+        }
+
+        const user = await getUserByUid(userData.uid);
 
         dispatch({
             type: "auth",
             payload: {
                 user: {
-                    googleUID: uid,
-                    name: displayName,
-                    email,
-                    status: true,
-                    profile: 'Client'
+                    uid: user.uid,
+                    name: user.name,
+                    email: user.email,
+                    status: user.status,
+                    profile: user.profile,
+                    photoURL: user.photoURL
                 }
             }
         });
 
         return {
-            success,
-        };
+            success: true,
+        }
     }
 
-    const startLoginWithEmailAndPasssword = async (email: string, password: string): Promise<AuthResponse> => {
+    const startLoginWithEmailAndPasssword = async (emailUser: string, password: string): Promise<AuthResponse> => {
 
-        const { success, displayName, userEmail, uid, photoURL, errorMessage } = await loginWithEmailAndPassword(email, password);
+        const { success, displayName, email, uid, photoURL, errorMessage } = await loginWithEmailAndPassword(emailUser, password);
 
         if (!success) {
             dispatch({
@@ -164,8 +200,9 @@ export const AuthProvider: React.FC = ({ children }: any) => {
             type: "auth",
             payload: {
                 user: {
+                    uid,
                     name: displayName,
-                    email: userEmail,
+                    email,
                     status: true,
                     profile: 'Client',
                     photoURL: photoURL

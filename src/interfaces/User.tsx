@@ -1,5 +1,5 @@
 export interface User {
-    googleUID?: string;
+    uid?: string;
     rut?: string;
     checkDigit?: string;
     name: string;

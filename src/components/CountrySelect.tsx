@@ -23,9 +23,10 @@ const CountrySelectItem = forwardRef<HTMLDivElement, ICountry>(
 
 interface Props {
     handleSelectCountry: (name: string) => void;
+    errorCountry: string;
 }
 
-const CountrySelect = ({ handleSelectCountry }: Props) => {
+const CountrySelect = ({ handleSelectCountry, errorCountry }: Props) => {
     return (
         <Select
             label="País"
@@ -40,6 +41,7 @@ const CountrySelect = ({ handleSelectCountry }: Props) => {
                 item?.name?.toLowerCase().includes(value?.toLowerCase().trim()) ||
                 item?.code?.toLowerCase().includes(value?.toLowerCase().trim())
             }
+            error={errorCountry}
         />
     );
 };

@@ -25,31 +25,54 @@ import {
     TitleProps,
     useMantineTheme
 } from "@mantine/core";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import {
     IconPlus
 } from "@tabler/icons-react";
-import { CategorySelect, CountrySelect } from "../components";
+import { CountrySelect } from "../components";
 
-import { Link as LinkRouter } from "react-router-dom";
+import { Link as LinkRouter, useNavigate } from "react-router-dom";
+
 import GooglePlace from "../components/Place";
+import ConfidenceSelect from "../components/ConfidenceSelect";
+
+import * as yup from "yup";
+import { addFoundation } from "../firebase/service";
+import ResponsibleSelect from "../components/ResponsibleSelect";
+
+const validationFoundationSchema = yup.object().shape({
+    name: yup.string().required('El nombre es requerido'),
+    country: yup.string().required('El país es requerido'),
+    city: yup.string().required('La ciudad es requerida'),
+    address: yup.string().required('La dirección es requerida'),
+    fono: yup.string().required('El teléfono es requerido'),
+    confidenceLevel: yup.number().notOneOf([0], 'El nivel de confianza es requerido'),
+    responsible: yup.string().required('El responsable es requerido'),
+});
+
 
 const CreateFoundationPage = () => {
 
-    const [formValues, setFormValues] = useState<{ name: string; city: string, address: string, confidenceLevel: number, fono: string, responsible: string }>({
+    const [formValues, setFormValues] = useState<{ name: string; country: string; city: string, address: string, lat: string, lng: string, confidenceLevel: number, fono: string, responsible: string }>({
         name: '',
+        country: '',
         city: '',
         address: '',
+        lat: '',
+        lng: '',
         confidenceLevel: 0,
         fono: '',
         responsible: '',
     });
 
+    const [errorMessages, setErrorMessages] = useState<Record<string, string>>({});
+    const [error, setError] = useState<string | null>(null);
+
     const [countrySelect, setCountrySelect] = useState<string>('');
 
 
-
+    const navigate = useNavigate();
     const theme = useMantineTheme()
     // const [active, setActive] = useState(0);
     // const [target, setTarget] = useState('deadline');
@@ -82,8 +105,74 @@ const CreateFoundationPage = () => {
 
     const handleSelectCountry = (name: string) => {
         setCountrySelect(name);
+        setFormValues({ ...formValues, country: name });
     }
 
+    const updateAddressReferences = (name: string, lat: string, lng: string) => {
+        setFormValues({ ...formValues, address: name, lat: lat, lng: lng });
+    }
+
+    const updateConfidenceLevel = (value: string) => {
+        if (!value) return setFormValues({ ...formValues, confidenceLevel: 0 });
+
+        setFormValues({ ...formValues, confidenceLevel: parseInt(value) });
+    }
+
+    const updateResponsible = (value: string) => {
+        if (!value) return setFormValues({ ...formValues, responsible: '' });
+
+        setFormValues({ ...formValues, responsible: value });
+    }
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.currentTarget;
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+    }
+
+    const onCreateFoundation = async () => {
+
+        const isValid = await isValidForm();
+
+        if (isValid) {
+            // Format data
+            const foundationData = {
+                name: formValues.name,
+                country: formValues.country,
+                city: formValues.city,
+                address: formValues.address,
+                lat: formValues.lat,
+                lng: formValues.lng,
+                confidenceLevel: formValues.confidenceLevel,
+                fono: formValues.fono,
+                responsible: formValues.responsible,
+            }
+
+            const response = await addFoundation(foundationData);
+            console.log(response);
+            if (!response.success) return setError('ocurrió un error al crear la fundación');
+
+            // Redirect to dashboard
+            navigate('/panel/dashboard');
+            
+        }
+    }
+
+    const isValidForm = async (): Promise<boolean> => {
+        try {
+            await validationFoundationSchema.validate(formValues, { abortEarly: false });
+            return true;
+        } catch (error) {
+            const errors: Record<string, string> = {};
+            error.inner.forEach((err) => {
+                errors[err.path] = err.message;
+            });
+            setErrorMessages(errors);
+            return false;
+        }
+    }
     return (
         <>
             <Helmet>
@@ -97,8 +186,24 @@ const CreateFoundationPage = () => {
                         <Title {...titleProps}>Información Fundación</Title>
                         <Paper {...paperProps}>
                             <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                                <TextInput label="Titulo" />
-                                <CategorySelect />
+                                <TextInput
+                                    label="Nombre"
+                                    placeholder="Ingresar nombre de la fundación"
+                                    name='name'
+                                    value={formValues.name}
+                                    onChange={handleChange}
+                                    error={errorMessages.name}
+                                    required />
+                                <TextInput
+                                    label="Teléfono"
+                                    placeholder="Ingresar teléfono"
+                                    name='fono'
+                                    value={formValues.fono}
+                                    onChange={handleChange}
+                                    error={errorMessages.fono}
+                                    required />
+                                <ConfidenceSelect errorConfidence={errorMessages.confidenceLevel} updateSelectedConfidence={updateConfidenceLevel} />
+                                <ResponsibleSelect errorResponsible={errorMessages.responsible} handleSelectResponsible={updateResponsible} />
                             </SimpleGrid>
                         </Paper>
                         <Paper {...paperProps}>
@@ -107,9 +212,16 @@ const CreateFoundationPage = () => {
                                 Seleccione el país al que enviaremos los fondos (normalmente, donde reside).
                             </Text>
                             <SimpleGrid cols={1} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                                <CountrySelect handleSelectCountry={handleSelectCountry} />
-                                <TextInput label="Ciudad" placeholder="Antofagasta" />
-                                <GooglePlace />
+                                <CountrySelect handleSelectCountry={handleSelectCountry} errorCountry={errorMessages.country} />
+                                <TextInput
+                                    label="Ciudad"
+                                    placeholder="Antofagasta"
+                                    name='city'
+                                    value={formValues.city}
+                                    onChange={handleChange}
+                                    error={errorMessages.city}
+                                    required />
+                                <GooglePlace updateAddress={updateAddressReferences} />
                             </SimpleGrid>
                         </Paper>
                         {/* <Paper {...paperProps}>
@@ -223,8 +335,7 @@ const CreateFoundationPage = () => {
                                 <Button
                                     leftIcon={<IconPlus size={18} />}
                                     component={LinkRouter}
-                                    onClick={() => console.log('press')}
-                                >
+                                    onClick={onCreateFoundation} to={""}                                >
                                     Crear una fundación
                                 </Button>
                             </Flex>

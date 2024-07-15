@@ -23,8 +23,6 @@ import * as yup from "yup";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/auth/AuthContext";
 
-
-
 const validationLoginSchema = yup.object().shape({
     email: yup.string().email('Ingrese un correo electrónico válido').required('El correo electrónico es requerido'),
     password: yup.string().required('La contraseña es requerida').min(6, 'La contraseña debe tener al menos 6 caracteres')

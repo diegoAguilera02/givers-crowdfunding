@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
 import {
-    ActionIcon,
-    Alert,
+    // ActionIcon,
+    // Alert,
     Anchor,
     Box,
     Button,
@@ -15,17 +15,15 @@ import {
     PaperProps,
     Radio,
     SegmentedControl,
-    Select,
     SimpleGrid,
     Stack,
-    Stepper,
     Text,
     TextInput,
     Title,
     TitleProps,
     useMantineTheme
 } from "@mantine/core";
-import { Link, RichTextEditor } from '@mantine/tiptap';
+import { Link } from '@mantine/tiptap';
 import { useEditor } from '@tiptap/react';
 import Highlight from '@tiptap/extension-highlight';
 import StarterKit from '@tiptap/starter-kit';
@@ -35,103 +33,53 @@ import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import React, { forwardRef, useState } from "react";
 import { DateInput } from "@mantine/dates";
-import {
-    IconBrandApple,
-    IconBrandFacebook,
-    IconBrandGoogle,
-    IconBrandLinkedin,
-    IconBrandPaypal,
-    IconBrandTwitter,
-    IconBrandWhatsapp,
-    IconBrandYoutube,
-    IconCalendar,
-    IconCheck,
-    IconChevronLeft,
-    IconChevronRight,
-    IconCurrency,
-    IconCurrencyDollar,
-    IconInfoCircleFilled,
-    IconLink,
-    IconMail,
-    IconPlus,
-    IconTrash
-} from "@tabler/icons-react";
-import { CategorySelect, CountrySelect, CurrencySelect, FileDropzone } from "../components";
-import { randomId } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
+import { CategorySelect, CurrencySelect, FileDropzone } from "../components";
 
 import { Link as LinkRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import FoundationSelect from "../components/FoundationSelect";
 
-interface ISocialProps {
-    icon: React.FC<any>;
-    title: React.ReactNode;
-}
+import * as yup from 'yup';
+import { IconCalendar, IconCurrencyDollar } from "@tabler/icons-react";
 
-const SocialSelectItem = forwardRef<HTMLDivElement, ISocialProps>(
-    ({ title, icon: Icon, ...others }: ISocialProps, ref) => (
-        <div ref={ref} {...others}>
-            <Group noWrap>
-                <Icon size={18} stroke={1.5} />
-                <Text size="sm" transform="capitalize">{title}</Text>
-            </Group>
-        </div>
-    )
-);
+const validationCampaignSchema = yup.object().shape({
+    name: yup.string().required('El nombre de la campaña es requerido'),
+    description: yup.string().required('La descripción de la campaña es requerida'),
+    category: yup.string().required('La categoría de la campaña es requerida'),
+    foundation: yup.string().required('La fundación de la campaña es requerida'),
+    initDate: yup.string().required('La fecha de inicio de la campaña es requerida'),
+    finishDate: yup.string().required('La fecha de finalización de la campaña es requerida'),
+    isCause: yup.boolean().required('El tipo de campaña es requerido'),
+    isExperience: yup.boolean().required('El tipo de campaña es requerido'),
+    requestAmount: yup.number().required('El monto de la campaña es requerido'),
+});
 
 const CreateCampaignPage = () => {
+
+    const navigate = useNavigate();
+
+    const [formValues, setFormValues] = useState<{ name: string; description: string; requestAmount: number; category: string; foundation: string; initDate: Date; finishDate: Date; isCause: boolean; isExperience: boolean }>({
+        name: '',
+        description: '',
+        category: '',
+        foundation: '',
+        initDate: null,
+        finishDate: null,
+        isCause: false,
+        isExperience: false,
+        requestAmount: 0,
+    });
+
+    const [errorMessages, setErrorMessages] = useState<Record<string, string>>({});
+    const [error, setError] = useState<string | null>(null);
+
+
     const theme = useMantineTheme()
     const [active, setActive] = useState(0);
     const [target, setTarget] = useState('deadline');
     const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
     const [donationType, setDonationType] = useState('any');
     const [minimumCheck, setMinimumCheck] = useState(false);
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Underline,
-            Link,
-            Superscript,
-            SubScript,
-            Highlight,
-            TextAlign.configure({ types: ['heading', 'paragraph'] }),
-        ],
-        content: '',
-    });
-
-    const socialForm = useForm({
-        initialValues: {
-            employees: [{ name: '', active: false, key: randomId() }],
-        },
-    });
-
-    const nextStep = () => setActive((current: number) => (current < 4 ? current + 1 : current));
-    const prevStep = () => setActive((current: number) => (current > 0 ? current - 1 : current));
-
-    const socialFields = socialForm.values.employees.map((item, index) => (
-        <Group key={item.key} mt="xs">
-            <Select
-                aria-label="social"
-                data={
-                    [
-                        { title: 'Facebook', icon: IconBrandFacebook },
-                        { title: 'Whatsapp', icon: IconBrandWhatsapp },
-                        { title: 'LinkedIn', icon: IconBrandLinkedin },
-                        { title: 'Twitter', icon: IconBrandTwitter },
-                        { title: 'Youtube', icon: IconBrandYoutube },
-                        { title: 'Other links', icon: IconLink },
-                    ].map(c => ({ value: c.title, label: c.title, ...c }))}
-                itemComponent={SocialSelectItem}
-            />
-            <TextInput
-                placeholder="https://"
-                sx={{ flex: 1 }}
-                {...socialForm.getInputProps(`employees.${index}.name`)}
-            />
-            <ActionIcon color="red" onClick={() => socialForm.removeListItem('employees', index)}>
-                <IconTrash size="1rem" />
-            </ActionIcon>
-        </Group>
-    ));
 
     const titleProps: TitleProps = {
         size: 24,
@@ -151,6 +99,47 @@ const CreateCampaignPage = () => {
         sx: { backgroundColor: theme.white }
     }
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.currentTarget;
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+    }
+
+    const onCreateCampaign = async () => {
+
+        const isValid = await isValidForm();
+
+        if (isValid) {
+            // Format data
+            const campaignData = {
+            }
+
+            // const response = await addFoundation(foundationData);
+            console.log(response);
+            if (!response.success) return setError('ocurrió un error al crear la fundación');
+
+            // Redirect to dashboard
+            navigate('/panel/dashboard');
+
+        }
+    }
+
+    const isValidForm = async (): Promise<boolean> => {
+        try {
+            await validationCampaignSchema.validate(formValues, { abortEarly: false });
+            return true;
+        } catch (error) {
+            const errors: Record<string, string> = {};
+            error.inner.forEach((err) => {
+                errors[err.path] = err.message;
+            });
+            setErrorMessages(errors);
+            return false;
+        }
+    }
+
     return (
         <>
             <Helmet>
@@ -164,20 +153,13 @@ const CreateCampaignPage = () => {
                         <Title {...titleProps}>Información Campaña</Title>
                         <Paper {...paperProps}>
                             <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                                <TextInput label="Titulo" />
+                                <TextInput label="Nombre" />
+                                <TextInput label="Descripción" />
                                 <CategorySelect />
+                                <FoundationSelect />
                             </SimpleGrid>
                         </Paper>
-                        <Paper {...paperProps}>
-                            <Title {...subTitleProps}>Campaign location</Title>
-                            <Text size="sm" mb="sm">Please select the country that we&apos;ll be sending funds to
-                                (typically where you&apos;re resident). This helps match you to the correct payment
-                                processors.</Text>
-                            <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                                <CountrySelect />
-                                <TextInput label="Ciudad" placeholder="city" />
-                            </SimpleGrid>
-                        </Paper>
+
                         <Paper {...paperProps}>
                             <Stack spacing="sm">
                                 <Title {...subTitleProps}>Información de Donación</Title>
@@ -193,39 +175,35 @@ const CreateCampaignPage = () => {
                                     </Group>
                                 </Radio.Group>
                                 <Paper {...paperProps}>
-                                    {target === 'deadline' ?
-                                        <Stack spacing="xs">
-                                            <Text size="sm">Fundraiser with a specific end date?</Text>
-                                            <Text size="sm">This creates urgency and should always be used when
-                                                money is needed before a certain time.</Text>
-                                            <DateInput
-                                                value={deadlineDate}
-                                                onChange={setDeadlineDate}
-                                                label="Deadline"
-                                                placeholder="Date input"
-                                                icon={<IconCalendar size={18} />}
-                                            />
-                                            <NumberInput
-                                                label="Target amount"
-                                                icon={<IconCurrencyDollar size={18} />} />
-                                            <Checkbox
-                                                label="Allow your fundraiser to be funded over the needed amount?" />
-                                        </Stack> :
-                                        <Stack spacing="xs">
-                                            <Text size="sm">Ongoing (no deadline) fundraiser?</Text>
-                                            <Text size="sm">This should be used if you are collecting money on a
-                                                regular
-                                                basis.</Text>
-                                            <Checkbox
-                                                checked={minimumCheck}
-                                                onChange={(event) => setMinimumCheck(event.currentTarget.checked)}
-                                                label="Select this if you would like to set a specific a minimum financial target" />
-                                            {minimumCheck &&
-                                                <NumberInput
-                                                    label="Target amount"
-                                                    icon={<IconCurrencyDollar size={18} />}
-                                                />}
-                                        </Stack>}
+                                    <Stack spacing="xs">
+                                        <Text size="sm">Fundraiser with a specific end date?</Text>
+                                        <Text size="sm">This creates urgency and should always be used when
+                                            money is needed before a certain time.</Text>
+                                        <DateInput
+                                            name="initDate"
+                                            value={formValues.initDate}
+                                            onChange={(value) => setFormValues({ ...formValues, initDate: value })}
+                                            label="Fecha inicial campaña"
+                                            placeholder="Fecha inicial"
+                                            lang="es"
+                                            icon={<IconCalendar size={18} />}
+                                        />
+
+                                        <DateInput
+                                            value={deadlineDate}
+                                            onChange={(value) => setFormValues({ ...formValues, finishDate: value })}
+                                            label="Fecha final campaña"
+                                            placeholder="Fecha final"
+                                            lang="es"
+                                            icon={<IconCalendar size={18} />}
+                                        />
+
+                                        <NumberInput
+                                            label="Monto a recaudar"
+                                            icon={<IconCurrencyDollar size={18} />} />
+                                        <Checkbox
+                                            label="Allow your fundraiser to be funded over the needed amount?" />
+                                    </Stack>
                                 </Paper>
                             </Stack>
                         </Paper>
@@ -287,7 +265,8 @@ const CreateCampaignPage = () => {
                                 </Button>
 
                                 <Button
-                                    leftIcon={<IconPlus size={18} />}
+                                    to=""
+                                    // leftIcon={<IconPlus size={18} />}
                                     component={LinkRouter}
                                     onClick={() => console.log('press')}
                                 >

@@ -30,6 +30,7 @@ import { Link } from "react-router-dom";
 import GiversLayout from "../layout/GiversLayout";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth/AuthContext";
+import FoundationsTable from "../components/FoundationsTable";
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -218,18 +219,18 @@ const DashboardPage = () => {
                                 </Flex>
                             </Card.Section>
                             <Card.Section>
-                                <CampaignsTable />
+                                <FoundationsTable />
                             </Card.Section>
                         </Paper>
 
                         {/* Donators Table */}
-                        <Paper {...paperProps}>
+                        {/* <Paper {...paperProps}>
                             <Card.Section>
                                 <Title {...subTitleProps}>Top Colaboradores</Title>
                                 <DonatorsTable />
                             </Card.Section>
                             <Card.Section></Card.Section>
-                        </Paper>
+                        </Paper> */}
 
                         {/* Yearly Donation Chart */}
                         {/* <Paper {...paperProps}>

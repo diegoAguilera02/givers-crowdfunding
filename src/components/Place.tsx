@@ -1,17 +1,27 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { useRef } from "react";
 import { StandaloneSearchBox, LoadScript } from "@react-google-maps/api";
 import { TextInput } from "@mantine/core";
 
-const GooglePlace = () => {
-    const inputRef = useRef<HTMLInputElement>(null);
+
+interface Props {
+    updateAddress: (address: string, lat: string, lng: string) => void;
+}
+
+const GooglePlace = ({ updateAddress }: Props) => {
+    const inputRef = useRef<google.maps.places.SearchBox | null>(null);
 
     const handlePlaceChanged = () => {
         const [place] = inputRef.current?.getPlaces();
 
         if (place) {
-            console.log(place.formatted_address);
-            console.log(place.geometry?.location.lat());
-            console.log(place.geometry?.location.lng());
+            // console.log(place.formatted_address);
+            // console.log(place.geometry?.location.lat());
+            // console.log(place.geometry?.location.lng());
+
+            updateAddress(place.formatted_address,
+                place.geometry?.location.lat().toString(),
+                place.geometry?.location.lng().toString());
         }
 
     }
