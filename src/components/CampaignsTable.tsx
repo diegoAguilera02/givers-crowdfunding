@@ -1,10 +1,9 @@
 import { ICampaign } from "../types";
 import { Avatar, Group, Text } from "@mantine/core";
-import campaignsData from "../data/Campaigns.json";
 import { DataTable } from "mantine-datatable";
 import { useEffect, useState } from "react";
 import { getCampaigns } from "../firebase/service";
-import { formattingToCLP, formattingToCLPNumber } from "../helpers/formatCurrency";
+import { formattingToCLPNumber } from "../helpers/formatCurrency";
 
 const PAGE_SIZE = 10;
 
@@ -53,11 +52,11 @@ const CampaignsTable = () => {
                 { accessor: 'description', title: 'Descripción' },
                 {
                     accessor: 'cumulativeAmount', title: 'Monto acumulado',
-                    render: ({ cumulativeAmount }) => formattingToCLP(cumulativeAmount)
+                    render: ({ cumulativeAmount }) => formattingToCLPNumber(cumulativeAmount)
                 },
                 {
                     accessor: 'requestAmount', title: 'Monto solicitado',
-                    render: ({ requestAmount }) => formattingToCLP(requestAmount)
+                    render: ({ requestAmount }) => formattingToCLPNumber(requestAmount)
                 },
                 {
                     accessor: 'initDate', title: 'Fecha de inicio',

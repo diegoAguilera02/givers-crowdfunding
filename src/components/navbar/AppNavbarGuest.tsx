@@ -1,5 +1,4 @@
 import {
-    ActionIcon,
     Box,
     BoxProps,
     Burger,
@@ -11,15 +10,11 @@ import {
     Menu,
     rem,
     ScrollArea,
-    Text,
-    UnstyledButton,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
-    IconBell,
     IconHeart,
     IconMessage,
-    IconSearch,
     IconSettings,
     IconStar,
 } from '@tabler/icons-react';
@@ -144,17 +139,17 @@ const useStyles = createStyles((theme) => ({
 //     "image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
 // }
 
-const ICON_SIZE = 18
+// const ICON_SIZE = 18
 
 type IProps = BoxProps
 
 const AppNavbarGuest = ({ ...others }: IProps) => {
 
     // const { user, startLogout } = useContext(AuthContext);
-    const { classes, theme, cx } = useStyles();
-    const [userMenuOpened, setUserMenuOpened] = useState(false);
+    const { classes, theme } = useStyles();
+    const [setUserMenuOpened] = useState(false);
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
-    const [searchOpened, { toggle: toggleSearchDrawer, close: closeSearchDrawer }] = useDisclosure(false);
+    const [searchOpened, { close: closeSearchDrawer }] = useDisclosure(false);
     const matchesMobile = useMediaQuery('(max-width: 600px)');
 
     return (
@@ -195,8 +190,8 @@ const AppNavbarGuest = ({ ...others }: IProps) => {
                                 width={260}
                                 position="bottom-end"
                                 transitionProps={{ transition: 'pop-top-right' }}
-                                onClose={() => setUserMenuOpened(false)}
-                                onOpen={() => setUserMenuOpened(true)}
+                                // onClose={() => setUserMenuOpened(false)}
+                                // onOpen={() => setUserMenuOpened(true)}
                                 withinPortal
                             >
                                 <Menu.Dropdown>

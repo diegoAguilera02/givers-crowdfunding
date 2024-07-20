@@ -26,7 +26,7 @@ import {
 } from "@mantine/core";
 import { IconFlag, IconSeparator, IconShare } from "@tabler/icons-react";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { BackButton, DonationDrawer, NotFound, ShareModal, UserCard } from "../components";
+import { BackButton, DonationDrawer, ShareModal, UserCard } from "../components";
 import { Helmet } from "react-helmet";
 import * as dayjs from "dayjs";
 import * as LocalizedFormat from "dayjs/plugin/localizedFormat"

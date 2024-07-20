@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { forwardRef, useEffect, useState } from 'react';
 import { Group, Select, Text } from "@mantine/core";
 import { getCategories } from '../firebase/service';

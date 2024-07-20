@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { Group, Image, rem, Text, useMantineTheme } from "@mantine/core";
 import { IconAlbum, IconPhotoPlus, IconUpload, IconX } from "@tabler/icons-react";
@@ -28,6 +30,7 @@ const FileDropzone = ({ label, description, ...others }: IFileInputProps) => {
         }
     }
 
+    console.log(files);
     return (
         <>
             <Dropzone

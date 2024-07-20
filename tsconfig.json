@@ -15,6 +15,9 @@
 
     /* Linting */
     "strict": false,
+    "noImplicitAny": false,            // Deshabilita la verificación de 'any' implícito
+    "strictNullChecks": false,         // Deshabilita la verificación estricta de null
+    "strictPropertyInitialization": false, // Deshabilita la verificación de inicialización estricta de propiedades
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true

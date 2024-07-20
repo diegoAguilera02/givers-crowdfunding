@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, createStyles, Flex, FlexProps, getStylesRef, rem } from '@mantine/core';
-import { IconFileDollar, IconFolderPlus, IconHeart, IconHome, IconUserCircle, } from '@tabler/icons-react';
+import { IconUserCircle, } from '@tabler/icons-react';
 import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({

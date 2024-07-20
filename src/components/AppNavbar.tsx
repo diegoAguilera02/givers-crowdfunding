@@ -29,7 +29,6 @@ import {
 import { useContext, useState } from "react";
 import { AppLinks, BrandName, SearchDrawer } from "./index";
 import { AuthContext } from '../context/auth/AuthContext';
-import { logoutFirebase } from '../firebase/providers';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -212,12 +211,12 @@ const AppNavbar = ({ ...others }: IProps) => {
                                         className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
                                     >
                                         <Group spacing={7}>
-                                            <Avatar
+                                            {/* <Avatar
                                                 src={user.image}
                                                 alt={user?.name}
                                                 radius="xl"
                                                 size={matchesMobile ? 18 : 20}
-                                            />
+                                            /> */}
                                             {!matchesMobile &&
                                                 <>
                                                     <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>

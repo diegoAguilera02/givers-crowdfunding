@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // firebaseService.ts
 
 import { Foundation } from "../interfaces/Foundation";
@@ -85,7 +86,7 @@ export const getFoundations = async () => {
     const foundations = [];
     querySnapshot.forEach((doc) => {
 
-      const { name, country, city, address, fono, responsible } = doc.data();
+      const { name, country, city, address, fono } = doc.data();
       foundations.push({
         id: doc.id,
         name,

@@ -1,5 +1,4 @@
 import {
-    Badge,
     Button,
     Card,
     createStyles,
@@ -8,13 +7,12 @@ import {
     Group,
     Image,
     PaperProps,
-    Progress,
     Stack,
     Text,
 } from '@mantine/core';
 import { Link } from "react-router-dom";
 import { Campaign } from '../interfaces/Campaign';
-import { formattingToCLP, formattingToCLPNumber } from '../helpers/formatCurrency';
+import { formattingToCLPNumber } from '../helpers/formatCurrency';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -57,14 +55,14 @@ const CampaignCard = ({ data, showActions }: IProps) => {
         id,
         name,
         description,
-        initDate,
-        endDate,
-        isCause,
-        isExperience,
-        cumulativeAmount,
+        // initDate,
+        // endDate,
+        // isCause,
+        // isExperience,
+        // cumulativeAmount,
         requestAmount,
         multimedia,
-        status,
+        // status,
         donorsCount,
     } = data;
     const linkProps = { to: `/campaign/${id}`, rel: 'noopener noreferrer' };
@@ -90,7 +88,7 @@ const CampaignCard = ({ data, showActions }: IProps) => {
                     {/* <Progress value={daysLeft} /> */}
 
                     <Flex justify="space-between">
-                        <Text><b>{formattingToCLP(requestAmount)}</b> recaudados</Text>
+                        <Text><b>{formattingToCLPNumber(requestAmount)}</b> recaudados</Text>
                         <Text><b>{donorsCount}</b> donaciones</Text>
                     </Flex>
 

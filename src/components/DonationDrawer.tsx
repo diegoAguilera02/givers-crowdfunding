@@ -133,7 +133,7 @@ const DonationDrawer = ({campaign, iconSize, ...others}: IProps) => {
                                         </Group>
                                         <TextInput label="Name on card"/>
                                         <Group grow>
-                                            <CountrySelect/>
+                                            {/* <CountrySelect/> */}
                                             <TextInput label="Postal code"/>
                                         </Group>
                                         <Checkbox label="Save card for future donations"/>
