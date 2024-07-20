@@ -1,6 +1,3 @@
-import { ICampaign } from "../types";
-import { Avatar, Group, Text } from "@mantine/core";
-import campaignsData from "../data/Campaigns.json";
 import { DataTable } from "mantine-datatable";
 import { useEffect, useState } from "react";
 import { getFoundations } from "../firebase/service";

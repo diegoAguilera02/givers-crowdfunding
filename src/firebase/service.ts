@@ -103,6 +103,69 @@ export const getFoundations = async () => {
   }
 }
 
+export const getCampaigns = async () => {
+  try {
+    const q = query(collection(FirebaseDB, "campaigns"),
+      where("status", "==", true));
+
+    const querySnapshot = await getDocs(q);
+
+    const campaigns = [];
+    querySnapshot.forEach((doc) => {
+
+      const { name, description, initDate, endDate, isCause, isExperience, cumulativeAmount, requestAmount, donorsCount, multimedia } = doc.data();
+      campaigns.push({
+        id: doc.id,
+        name,
+        description,
+        initDate,
+        endDate,
+        isCause,
+        isExperience,
+        cumulativeAmount,
+        requestAmount,
+        donorsCount,
+        multimedia
+        // ...doc.data(),
+      });
+    });
+
+    return campaigns;
+  } catch (error) {
+    console.error("Error getting documents: ", error);
+  }
+}
+
+export const getCampaign = async (id: string) => {
+  try {
+    const docRef = doc(FirebaseDB, "campaigns", id);
+    const docSnapshot = await getDoc(docRef);
+
+    if (docSnapshot.exists()) {
+      const { name, description, initDate, endDate, isCause, isExperience, cumulativeAmount, requestAmount, donorsCount, multimedia, foundation, createdAt } = docSnapshot.data();
+      return {
+        id: docSnapshot.id,
+        name,
+        description,
+        initDate,
+        endDate,
+        isCause,
+        isExperience,
+        cumulativeAmount,
+        requestAmount,
+        donorsCount,
+        multimedia,
+        foundation,
+        createdAt
+      };
+    } else {
+      console.error("No such document!");
+    }
+  } catch (error) {
+    console.error("Error getting documents: ", error);
+  }
+}
+
 export const getFoundationsSelect = async () => {
   try {
     const q = query(collection(FirebaseDB, "foundations"),

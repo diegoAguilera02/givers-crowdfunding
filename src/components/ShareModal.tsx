@@ -21,8 +21,8 @@ import {
     IconCopy,
     IconMail
 } from "@tabler/icons-react";
-import {ICampaign} from "../types";
-import {useMediaQuery} from "@mantine/hooks";
+import { ICampaign } from "../types";
+import { useMediaQuery } from "@mantine/hooks";
 
 interface IProps {
     campaign?: ICampaign
@@ -31,7 +31,7 @@ interface IProps {
     onClose: () => void
 }
 
-const ShareModal = ({campaign, iconSize, ...others}: IProps) => {
+const ShareModal = ({ campaign, iconSize, ...others }: IProps) => {
     const matchesMobile = useMediaQuery('(max-width: 768px)');
 
     const buttonProps: ButtonProps = {
@@ -40,38 +40,25 @@ const ShareModal = ({campaign, iconSize, ...others}: IProps) => {
     }
 
     return (
-        matchesMobile ?
-            <Drawer title="Help by sharing" position="bottom" {...others}>
+        (matchesMobile ?
+            <Drawer title="Ayuda compartiendo" position="bottom" {...others}>
                 <Stack>
-                    <Text>Campaigns shared on social networks raise up to 5x more.</Text>
-                    <Paper>
-                        <Flex wrap="wrap" gap="xs">
-                            <Button
-                                leftIcon={<IconBrandFacebook size={iconSize}/>} {...buttonProps}>Facebook</Button>
-                            <Button leftIcon={<IconBrandTwitter size={iconSize}/>} {...buttonProps}>Twitter</Button>
-                            <Button
-                                leftIcon={<IconBrandInstagram size={iconSize}/>} {...buttonProps}>Instagram</Button>
-                            <Button
-                                leftIcon={<IconBrandLinkedin size={iconSize}/>} {...buttonProps}>LinkedIn</Button>
-                            <Button leftIcon={<IconMail size={iconSize}/>} {...buttonProps}>Email</Button>
-                            <Button leftIcon={<IconCode size={iconSize}/>} {...buttonProps}>Embed</Button>
-                        </Flex>
-                    </Paper>
+                    <Text>Las campañas compartidas en redes sociales recaudan hasta 5 veces más.</Text>
                     <Paper>
                         <Flex align="flex-end" gap="sm">
                             <TextInput
-                                label="Copy Link"
-                                value={`https://Givers.com/${campaign?.id}`}
+                                label="Copiar Enlace"
+                                value={`https://givers.cl/campaign/${campaign?.id}`}
                                 disabled
-                                sx={{flex: '1 1 auto'}}/>
-                            <CopyButton value={`https://Givers.com/${campaign?.id}`} timeout={2000}>
-                                {({copied, copy}) => (
-                                    <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
+                                sx={{ flex: '1 1 auto' }} />
+                            <CopyButton value={`https://givers.cl/campaign/${campaign?.id}`} timeout={2000}>
+                                {({ copied, copy }) => (
+                                    <Tooltip label={copied ? 'Copiado' : 'Copiar'} withArrow position="right">
                                         <Button
                                             color={copied ? 'green' : 'gray'}
-                                            leftIcon={copied ? <IconCheck size="1rem"/> : <IconCopy size="1rem"/>}
+                                            leftIcon={copied ? <IconCheck size="1rem" /> : <IconCopy size="1rem" />}
                                             onClick={copy}>
-                                            {copied ? 'Copied' : 'Copy'}
+                                            {copied ? 'Copiado' : 'Copiar'}
                                         </Button>
                                     </Tooltip>
                                 )}
@@ -80,37 +67,24 @@ const ShareModal = ({campaign, iconSize, ...others}: IProps) => {
                     </Paper>
                 </Stack>
             </Drawer> :
-            <Modal title="Help by sharing" centered size="md" {...others}>
+            <Modal title="Ayuda compartiendo" centered size="md" {...others}>
                 <Stack>
-                    <Text>Campaigns shared on social networks raise up to 5x more.</Text>
-                    <Paper>
-                        <Flex wrap="wrap" gap="xs">
-                            <Button
-                                leftIcon={<IconBrandFacebook size={iconSize}/>} {...buttonProps}>Facebook</Button>
-                            <Button leftIcon={<IconBrandTwitter size={iconSize}/>} {...buttonProps}>Twitter</Button>
-                            <Button
-                                leftIcon={<IconBrandInstagram size={iconSize}/>} {...buttonProps}>Instagram</Button>
-                            <Button
-                                leftIcon={<IconBrandLinkedin size={iconSize}/>} {...buttonProps}>LinkedIn</Button>
-                            <Button leftIcon={<IconMail size={iconSize}/>} {...buttonProps}>Email</Button>
-                            <Button leftIcon={<IconCode size={iconSize}/>} {...buttonProps}>Embed</Button>
-                        </Flex>
-                    </Paper>
+                    <Text>Las campañas compartidas en redes sociales recaudan hasta 5 veces más.</Text>
                     <Paper>
                         <Flex align="flex-end" gap="sm">
                             <TextInput
-                                label="Copy Link"
-                                value={`https://Givers.com/${campaign?.id}`}
+                                label="Copiar Enlace"
+                                value={`https://givers.cl/campaign/${campaign?.id}`}
                                 disabled
-                                sx={{flex: '1 1 auto'}}/>
-                            <CopyButton value={`https://Givers.com/${campaign?.id}`} timeout={2000}>
-                                {({copied, copy}) => (
-                                    <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
+                                sx={{ flex: '1 1 auto' }} />
+                            <CopyButton value={`https://givers.cl/campaign${campaign?.id}`} timeout={2000}>
+                                {({ copied, copy }) => (
+                                    <Tooltip label={copied ? 'Copiado' : 'Copiar'} withArrow position="right">
                                         <Button
                                             color={copied ? 'green' : 'gray'}
-                                            leftIcon={copied ? <IconCheck size="1rem"/> : <IconCopy size="1rem"/>}
+                                            leftIcon={copied ? <IconCheck size="1rem" /> : <IconCopy size="1rem" />}
                                             onClick={copy}>
-                                            {copied ? 'Copied' : 'Copy'}
+                                            {copied ? 'Copiado' : 'Copiar'}
                                         </Button>
                                     </Tooltip>
                                 )}
@@ -119,6 +93,7 @@ const ShareModal = ({campaign, iconSize, ...others}: IProps) => {
                     </Paper>
                 </Stack>
             </Modal>
+        )
     );
 };
 

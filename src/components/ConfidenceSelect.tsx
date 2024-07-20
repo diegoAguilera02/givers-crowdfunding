@@ -2,19 +2,31 @@ import { forwardRef } from 'react';
 import { Group, Select, Text } from "@mantine/core";
 
 const CategorySelectItem = forwardRef<HTMLDivElement, any>(
-    ({ title, ...others }: any, ref) => (
+    ({ name, ...others }: any, ref) => (
         <div ref={ref} {...others}>
             <Group noWrap>
-                <others.icon size={18} />
-
                 <div>
-                    <Text size="sm">{title}</Text>
+                    <Text size="sm">{name}</Text>
                 </div>
             </Group>
         </div>
     )
 );
 
+const mockdata = [
+    {
+        id: '1',
+        name: 'Alta',
+    },
+    {
+        id: '2',
+        name: 'Media',
+    },
+    {
+        id: '3',
+        name: 'Baja',
+    }
+];
 
 interface Props {
     updateSelectedConfidence: (value: string) => void;
@@ -22,13 +34,12 @@ interface Props {
 }
 
 const ConfidenceSelect = ({ updateSelectedConfidence, errorConfidence }: Props) => {
-
     return (
         <Select
             label="Nivel de confianza"
             placeholder='Selecciona un nivel de confianza'
             itemComponent={CategorySelectItem}
-            data={mockdata.map(c => ({ value: c.id, label: c.title, ...c }))}
+            data={mockdata.map(c => ({ value: c.id, label: c.name }))}
             searchable
             clearable
             maxDropdownHeight={300}

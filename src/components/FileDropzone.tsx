@@ -1,6 +1,7 @@
-import {Dropzone, DropzoneProps, IMAGE_MIME_TYPE} from "@mantine/dropzone";
-import {Group, rem, Text, useMantineTheme} from "@mantine/core";
-import {IconAlbum, IconPhotoPlus, IconUpload, IconX} from "@tabler/icons-react";
+import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Group, Image, rem, Text, useMantineTheme } from "@mantine/core";
+import { IconAlbum, IconPhotoPlus, IconUpload, IconX } from "@tabler/icons-react";
+import { useState } from "react";
 
 interface IFileInputProps extends Pick<DropzoneProps, 'multiple'> {
     label: string
@@ -8,53 +9,90 @@ interface IFileInputProps extends Pick<DropzoneProps, 'multiple'> {
     multiple?: boolean
 }
 
-const FileDropzone = ({label, description, ...others}: IFileInputProps) => {
+const FileDropzone = ({ label, description, ...others }: IFileInputProps) => {
     const theme = useMantineTheme()
+    const [files, setFiles] = useState<File[]>([]);
+    const [previews, setPreviews] = useState<string[]>([]);
+
+    const handleDrop = (dropFiles: File[]) => {
+        if (dropFiles.length > 0) {
+            setFiles(dropFiles);
+            setPreviews(dropFiles.map(file => URL.createObjectURL(file)));
+        }
+    };
+
+
+    const handleReject = (rejectedFiles: File[]) => {
+        if (rejectedFiles.length > 0) {
+            console.log(rejectedFiles);
+        }
+    }
 
     return (
-        <Dropzone
-            onDrop={(files: any) => console.log('accepted files', files)}
-            onReject={(files: any) => console.log('rejected files', files)}
-            maxSize={3 * 1024 ** 2}
-            accept={IMAGE_MIME_TYPE}
-            {...others}
-        >
-            <Group
-                position="center"
-                spacing="xl"
-                style={{minHeight: rem(120), pointerEvents: 'none'}}
+        <>
+            <Dropzone
+                onDrop={(files: any) => handleDrop(files)}
+                onReject={(files: any) => handleReject(files)}
+                maxSize={3 * 1024 ** 2}
+                accept={IMAGE_MIME_TYPE}
+                {...others}
             >
-                <Dropzone.Accept>
-                    <IconUpload
-                        size="3.2rem"
-                        stroke={1.5}
-                        color={theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]}
-                    />
-                </Dropzone.Accept>
-                <Dropzone.Reject>
-                    <IconX
-                        size="3.2rem"
-                        stroke={1.5}
-                        color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
-                    />
-                </Dropzone.Reject>
-                <Dropzone.Idle>
-                    {others.multiple ?
-                        <IconPhotoPlus size="3.2rem" stroke={1.5}/> :
-                        <IconAlbum size="3.2rem" stroke={1.5}/>
-                    }
-                </Dropzone.Idle>
+                <Group
+                    position="center"
+                    spacing="xl"
+                    style={{ minHeight: rem(120), pointerEvents: 'none' }}
+                >
+                    <Dropzone.Accept>
+                        <IconUpload
+                            size="3.2rem"
+                            stroke={1.5}
+                            color={theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]}
+                        />
+                    </Dropzone.Accept>
+                    <Dropzone.Reject>
+                        <IconX
+                            size="3.2rem"
+                            stroke={1.5}
+                            color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
+                        />
+                    </Dropzone.Reject>
+                    <Dropzone.Idle>
+                        {others.multiple ?
+                            <IconPhotoPlus size="3.2rem" stroke={1.5} /> :
+                            <IconAlbum size="3.2rem" stroke={1.5} />
+                        }
+                    </Dropzone.Idle>
 
-                <div>
-                    <Text size="xl" inline>
-                        {label || 'Upload your profile picture'}
-                    </Text>
-                    <Text size="sm" color="dimmed" inline mt={7}>
-                        {description || 'This picture will be shown next to your name'}
-                    </Text>
+                    <div>
+                        <Text size="xl" inline>
+                            {label || 'Upload your profile picture'}
+                        </Text>
+                        <Text size="sm" color="dimmed" inline mt={7}>
+                            {description || 'This picture will be shown next to your name'}
+                        </Text>
+                    </div>
+                </Group>
+            </Dropzone>
+
+            {previews.length > 0 && (
+                <div style={{ marginTop: 20 }}>
+                    <h3>Uploaded Images:</h3>
+                    <Group>
+                        {previews.map((src, index) => (
+                            <Image
+                                key={index}
+                                src={src}
+                                alt={`Preview ${index}`}
+                                width={100}
+                                height={100}
+                                fit="cover"
+                                radius="md"
+                            />
+                        ))}
+                    </Group>
                 </div>
-            </Group>
-        </Dropzone>
+            )}
+        </>
     );
 };
 

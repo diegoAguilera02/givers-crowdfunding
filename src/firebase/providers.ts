@@ -48,8 +48,10 @@ export const signInWithGoogle = async (): Promise<AuthResponse> => {
 
 export const registerUserWithEmailAndPassword = async (name: string, email: string, password: string): Promise<AuthResult> => {
     try {
+        console.log(name, email, password);
         const response = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
 
+        console.log(response);
         const { uid, photoURL } = response.user;
 
 
@@ -74,12 +76,14 @@ export const registerUserWithEmailAndPassword = async (name: string, email: stri
 export const loginWithEmailAndPassword = async (email: string, password: string): Promise<AuthResult> => {
     try {
         const response = await signInWithEmailAndPassword(FirebaseAuth, email, password);
+        console.log(response);
         const { displayName, email: userEmail, uid, photoURL } = response.user;
         return {
             success: true,
             displayName, email: userEmail, uid, photoURL
         }
     } catch (error) {
+        console.log(error);
         const translateError = findError(error.message);
         return {
             success: false,

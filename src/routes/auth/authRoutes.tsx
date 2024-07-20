@@ -1,13 +1,13 @@
 import { Navigate } from "react-router-dom";
 import LoginPage from "../../pages/auth/Login";
 import RegisterPage from "../../pages/auth/Register";
-import { CampaignsPage, HowItWorksPage } from "../../pages";
+import { CampaignDetailsPage, CampaignsPage, HowItWorksPage } from "../../pages";
 
 
 
 export const authRoutes = [
     {
-        path: "main",
+        path: "landing",
         element: <CampaignsPage />
     },
     {
@@ -19,7 +19,11 @@ export const authRoutes = [
         element: <RegisterPage />
     },
     {
+        path: "campaign/:id",
+        element: <CampaignDetailsPage />
+    },
+    {
         path: "/*",
-        element: <Navigate to={"/login"} />
+        element: <Navigate to={"/landing"} />
     }
 ]

@@ -8,6 +8,8 @@ interface Props {
     updateAddress: (address: string, lat: string, lng: string) => void;
 }
 
+const libraries = ["places"]; // Define libraries outside the component
+
 const GooglePlace = ({ updateAddress }: Props) => {
     const inputRef = useRef<google.maps.places.SearchBox | null>(null);
 
@@ -28,7 +30,7 @@ const GooglePlace = ({ updateAddress }: Props) => {
     return (
         <LoadScript
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-            libraries={["places"]}
+            libraries={libraries}
         >
             <StandaloneSearchBox
                 onLoad={(ref) => (inputRef.current = ref)}

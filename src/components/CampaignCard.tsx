@@ -1,5 +1,6 @@
 import {
     Badge,
+    Button,
     Card,
     createStyles,
     Flex,
@@ -11,8 +12,9 @@ import {
     Stack,
     Text,
 } from '@mantine/core';
-import {ICampaign} from "../types";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Campaign } from '../interfaces/Campaign';
+import { formattingToCLP, formattingToCLPNumber } from '../helpers/formatCurrency';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -45,52 +47,54 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface IProps extends PaperProps {
-    data: ICampaign
+    data: Campaign
     showActions?: boolean
 }
 
-const CampaignCard = ({data, showActions}: IProps) => {
-    const {classes} = useStyles();
+const CampaignCard = ({ data, showActions }: IProps) => {
+    const { classes } = useStyles();
     const {
-        mainImage,
         id,
-        title,
-        amountRaised,
-        daysLeft,
-        contributors,
+        name,
         description,
-        category,
-        country
+        initDate,
+        endDate,
+        isCause,
+        isExperience,
+        cumulativeAmount,
+        requestAmount,
+        multimedia,
+        status,
+        donorsCount,
     } = data;
-    const linkProps = {to: `/campaigns/${id}`, rel: 'noopener noreferrer'};
-
+    const linkProps = { to: `/campaign/${id}`, rel: 'noopener noreferrer' };
     return (
         <Card radius="sm" shadow="md" ml="xs" component={Link} {...linkProps} className={classes.card}>
             <Card.Section>
-                <Image src={mainImage} height={280} className={classes.image}/>
+                <Image src={multimedia[0].url} height={280} className={classes.image} />
             </Card.Section>
 
             <Card.Section pt={0} px="md" pb="md">
                 <Stack>
                     <Text className={classes.title} lineClamp={1} fw={500} size="lg">
-                        {title}
+                        {name}
                     </Text>
 
                     <Group position="apart">
-                        <Text size="xs" transform="uppercase" color="dimmed" fw={700}>{country}</Text>
-                        <Badge variant="dot" color="secondary">{category}</Badge>
+                        {/* <Text size="xs" transform="uppercase" color="dimmed" fw={700}>{country}</Text>
+                        <Badge variant="dot" color="secondary">{category}</Badge> */}
                     </Group>
 
                     {showActions && <Text lineClamp={3} size="sm">{description}</Text>}
 
-                    <Progress value={daysLeft}/>
+                    {/* <Progress value={daysLeft} /> */}
 
                     <Flex justify="space-between">
-                        <Text><b>{amountRaised}</b> raised</Text>
-                        <Text><b>{contributors}</b> donations</Text>
+                        <Text><b>{formattingToCLP(requestAmount)}</b> recaudados</Text>
+                        <Text><b>{donorsCount}</b> donaciones</Text>
                     </Flex>
 
-                    {/*{showActions && <Button>Donate Now</Button>}*/}
+                    {showActions && <Button>Donar Ahora</Button>}
                 </Stack>
             </Card.Section>
         </Card>

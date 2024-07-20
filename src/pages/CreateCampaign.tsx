@@ -23,15 +23,7 @@ import {
     TitleProps,
     useMantineTheme
 } from "@mantine/core";
-import { Link } from '@mantine/tiptap';
-import { useEditor } from '@tiptap/react';
-import Highlight from '@tiptap/extension-highlight';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Superscript from '@tiptap/extension-superscript';
-import SubScript from '@tiptap/extension-subscript';
-import React, { forwardRef, useState } from "react";
+import React, { useState } from "react";
 import { DateInput } from "@mantine/dates";
 import { CategorySelect, CurrencySelect, FileDropzone } from "../components";
 
@@ -158,13 +150,22 @@ const CreateCampaignPage = () => {
                                 <CategorySelect />
                                 <FoundationSelect />
                             </SimpleGrid>
+
+                            <SimpleGrid cols={2} style={{ marginTop: 25 }} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+                                <Checkbox
+                                    label="Es una causa?"
+                                />
+                                <Checkbox
+                                    label="Es una experiencia?"
+                                />
+                            </SimpleGrid>
                         </Paper>
 
                         <Paper {...paperProps}>
                             <Stack spacing="sm">
                                 <Title {...subTitleProps}>Información de Donación</Title>
                                 <CurrencySelect />
-                                <Radio.Group
+                                {/* <Radio.Group
                                     label="What kind of fundraiser would you like to create?"
                                     value={target}
                                     onChange={setTarget}
@@ -173,7 +174,7 @@ const CreateCampaignPage = () => {
                                         <Radio value="deadline" label="Fundraiser with a specific end date?" />
                                         <Radio value="no-deadline" label="Ongoing (no deadline) fundraiser?" />
                                     </Group>
-                                </Radio.Group>
+                                </Radio.Group> */}
                                 <Paper {...paperProps}>
                                     <Stack spacing="xs">
                                         <Text size="sm">Fundraiser with a specific end date?</Text>
@@ -201,8 +202,6 @@ const CreateCampaignPage = () => {
                                         <NumberInput
                                             label="Monto a recaudar"
                                             icon={<IconCurrencyDollar size={18} />} />
-                                        <Checkbox
-                                            label="Allow your fundraiser to be funded over the needed amount?" />
                                     </Stack>
                                 </Paper>
                             </Stack>
