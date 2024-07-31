@@ -33,6 +33,7 @@ import FoundationSelect from "../components/FoundationSelect";
 
 import * as yup from 'yup';
 import { IconCalendar, IconCurrencyDollar } from "@tabler/icons-react";
+import { addCampaign } from "../firebase/service";
 
 const validationCampaignSchema = yup.object().shape({
     name: yup.string().required('El nombre de la campaña es requerido'),
@@ -43,14 +44,15 @@ const validationCampaignSchema = yup.object().shape({
     finishDate: yup.string().required('La fecha de finalización de la campaña es requerida'),
     isCause: yup.boolean().required('El tipo de campaña es requerido'),
     isExperience: yup.boolean().required('El tipo de campaña es requerido'),
-    requestAmount: yup.number().required('El monto de la campaña es requerido'),
+    requestAmount: yup.number().required('El monto de la campaña es requerido').min(1000, 'El monto de la campaña debe ser mayor a 1000'),
+    multimediaCount: yup.number().required('El contenido multimedia es requerido').min(1, 'Al menos una imagen es requerida')
 });
 
 const CreateCampaignPage = () => {
 
     const navigate = useNavigate();
 
-    const [formValues, setFormValues] = useState<{ name: string; description: string; requestAmount: number; category: string; foundation: string; initDate: Date; finishDate: Date; isCause: boolean; isExperience: boolean }>({
+    const [formValues, setFormValues] = useState<{ name: string; description: string; requestAmount: number; category: string; foundation: string; initDate: Date; finishDate: Date; isCause: boolean; isExperience: boolean, multimediaCount: number }>({
         name: '',
         description: '',
         category: '',
@@ -60,18 +62,17 @@ const CreateCampaignPage = () => {
         isCause: false,
         isExperience: false,
         requestAmount: 0,
+        multimediaCount: 0,
     });
+
+    const [files, setFiles] = useState<File[]>([]);
 
     const [errorMessages, setErrorMessages] = useState<Record<string, string>>({});
     const [error, setError] = useState<string | null>(null);
 
 
     const theme = useMantineTheme()
-    const [active, setActive] = useState(0);
-    const [target, setTarget] = useState('deadline');
     const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
-    const [donationType, setDonationType] = useState('any');
-    const [minimumCheck, setMinimumCheck] = useState(false);
 
     const titleProps: TitleProps = {
         size: 24,
@@ -91,6 +92,19 @@ const CreateCampaignPage = () => {
         sx: { backgroundColor: theme.white }
     }
 
+
+    const updateCategory = (value: string) => {
+        if (!value) return setFormValues({ ...formValues, category: '' });
+
+        setFormValues({ ...formValues, category: value });
+    }
+
+    const updateFoundation = (value: string) => {
+        if (!value) return setFormValues({ ...formValues, foundation: '' });
+
+        setFormValues({ ...formValues, foundation: value });
+    }
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.currentTarget;
         setFormValues({
@@ -106,10 +120,20 @@ const CreateCampaignPage = () => {
         if (isValid) {
             // Format data
             const campaignData = {
+                name: formValues.name,
+                description: formValues.description,
+                category: formValues.category,
+                foundation: formValues.foundation,
+                initDate: formValues.initDate,
+                endDate: formValues.finishDate,
+                isCause: formValues.isCause,
+                isExperience: formValues.isExperience,
+                requestAmount: formValues.requestAmount,
+                multimedia: files,
             }
 
-            // const response = await addFoundation(foundationData);
-            console.log(response);
+            const response = await addCampaign(campaignData);
+
             if (!response.success) return setError('ocurrió un error al crear la fundación');
 
             // Redirect to dashboard
@@ -132,6 +156,11 @@ const CreateCampaignPage = () => {
         }
     }
 
+    const updateHandleDrop = (dropFiles: File[]) => {
+        setFiles(dropFiles)
+        setFormValues({ ...formValues, multimediaCount: dropFiles.length })
+    }
+
     return (
         <>
             <Helmet>
@@ -145,18 +174,38 @@ const CreateCampaignPage = () => {
                         <Title {...titleProps}>Información Campaña</Title>
                         <Paper {...paperProps}>
                             <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                                <TextInput label="Nombre" />
-                                <TextInput label="Descripción" />
-                                <CategorySelect />
-                                <FoundationSelect />
+                                <TextInput
+                                    label="Nombre"
+                                    name="name"
+                                    value={formValues.name}
+                                    onChange={handleChange}
+                                    error={errorMessages.name}
+                                    required
+                                />
+                                <TextInput
+                                    label="Descripción"
+                                    name="description"
+                                    value={formValues.description}
+                                    onChange={handleChange}
+                                    error={errorMessages.description}
+                                    required
+                                />
+                                <CategorySelect errorCategory={errorMessages.category} handleSelectCategory={updateCategory} />
+                                <FoundationSelect errorFoundation={errorMessages.foundation} handleSelectFoundation={updateFoundation} />
                             </SimpleGrid>
 
                             <SimpleGrid cols={2} style={{ marginTop: 25 }} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
                                 <Checkbox
                                     label="Es una causa?"
+                                    name="isCause"
+                                    checked={formValues.isCause}
+                                    onChange={(event) => setFormValues({ ...formValues, isCause: event.currentTarget.checked })}
                                 />
                                 <Checkbox
                                     label="Es una experiencia?"
+                                    name="isExperience"
+                                    checked={formValues.isExperience}
+                                    onChange={(event) => setFormValues({ ...formValues, isExperience: event.currentTarget.checked })}
                                 />
                             </SimpleGrid>
                         </Paper>
@@ -164,22 +213,8 @@ const CreateCampaignPage = () => {
                         <Paper {...paperProps}>
                             <Stack spacing="sm">
                                 <Title {...subTitleProps}>Información de Donación</Title>
-                                <CurrencySelect />
-                                {/* <Radio.Group
-                                    label="What kind of fundraiser would you like to create?"
-                                    value={target}
-                                    onChange={setTarget}
-                                >
-                                    <Group mt="xs">
-                                        <Radio value="deadline" label="Fundraiser with a specific end date?" />
-                                        <Radio value="no-deadline" label="Ongoing (no deadline) fundraiser?" />
-                                    </Group>
-                                </Radio.Group> */}
                                 <Paper {...paperProps}>
                                     <Stack spacing="xs">
-                                        <Text size="sm">Fundraiser with a specific end date?</Text>
-                                        <Text size="sm">This creates urgency and should always be used when
-                                            money is needed before a certain time.</Text>
                                         <DateInput
                                             name="initDate"
                                             value={formValues.initDate}
@@ -188,6 +223,8 @@ const CreateCampaignPage = () => {
                                             placeholder="Fecha inicial"
                                             lang="es"
                                             icon={<IconCalendar size={18} />}
+                                            error={errorMessages.initDate}
+                                            required
                                         />
 
                                         <DateInput
@@ -197,65 +234,40 @@ const CreateCampaignPage = () => {
                                             placeholder="Fecha final"
                                             lang="es"
                                             icon={<IconCalendar size={18} />}
+                                            error={errorMessages.finishDate}
+                                            required
                                         />
 
                                         <NumberInput
                                             label="Monto a recaudar"
-                                            icon={<IconCurrencyDollar size={18} />} />
+                                            icon={<IconCurrencyDollar size={18} />}
+                                            name="requestAmount"
+                                            value={formValues.requestAmount}
+                                            onChange={(value) => { setFormValues({ ...formValues, requestAmount: parseInt(String(value)) }) }}
+                                            error={errorMessages.requestAmount}
+                                        />
                                     </Stack>
                                 </Paper>
                             </Stack>
                         </Paper>
                         <Paper {...paperProps}>
-                            <Title {...subTitleProps}>Tipo de donación</Title>
-                            <SegmentedControl
-                                size="md"
-                                value={donationType}
-                                onChange={setDonationType}
-                                data={[
-                                    { label: 'Any (popular option)', value: 'any' },
-                                    { label: 'Minimum', value: 'minimum' },
-                                    { label: 'Fixed', value: 'fixed' },
-                                ]}
-                                mb="sm"
-                            />
-                            {donationType === 'minimum' ?
-                                <NumberInput label="Minimum amount(s)" /> :
-                                <NumberInput label="Fixed amount(s)" />}
-                            <Checkbox
-                                label="Would you like your fundraising page shown in more than one language?"
-                                mt="sm"
-                            />
-                        </Paper>
-                        <Paper {...paperProps}>
                             <Stack spacing="sm">
-                                <Title {...subTitleProps}>Fund & Registration details</Title>
-                                <Text size="sm">*Name of the person receiving funds. For organizations, the legal
-                                    representative
-                                    name (this can be amended later).</Text>
-                                <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                                    <TextInput label="First name" />
-                                    <TextInput label="Last name" />
-                                </SimpleGrid>
+                                <Title {...subTitleProps}>Contenido Multimedia</Title>
                                 <FileDropzone
-                                    label="Upload your profile picture"
-                                    description="This picture will be shown next to your name"
+                                    label="Sube las fotos de tu campaña"
+                                    description="Estas imágenes se mostrarán junto a su nombre"
+                                    handleDropFile={updateHandleDrop}
                                 />
-                                <Checkbox label={
-                                    <>
-                                        I agree to the Givers{' '}
-                                        <Anchor href="#" target="_blank">
-                                            terms and conditions & privacy policy
-                                        </Anchor>
-                                    </>
-                                } />
+                                {
+                                    errorMessages.multimediaCount &&
+                                    <Text color="red" size="sm">{errorMessages.multimediaCount}</Text>
+                                }
                             </Stack>
                         </Paper>
 
                         <Card.Section mb="lg">
                             <Flex align="center" justify="center">
                                 <Button
-                                    // leftIcon={<IconPlus size={18} />}
                                     component={LinkRouter}
                                     to="/panel/dashboard"
                                     style={{ marginRight: 20 }}
@@ -267,7 +279,7 @@ const CreateCampaignPage = () => {
                                     to=""
                                     // leftIcon={<IconPlus size={18} />}
                                     component={LinkRouter}
-                                    onClick={() => console.log('press')}
+                                    onClick={onCreateCampaign}
                                 >
                                     Crear una campaña
                                 </Button>

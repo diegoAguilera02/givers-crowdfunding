@@ -3,7 +3,6 @@ import { forwardRef, useEffect, useState } from 'react';
 import { Group, Select, Text } from "@mantine/core";
 import { getFoundationsSelect } from '../firebase/service';
 
-
 const FoundationSelectItem = forwardRef<HTMLDivElement, any>(
     ({ name, ...others }: any, ref) => (
         <div ref={ref} {...others}>
@@ -16,8 +15,13 @@ const FoundationSelectItem = forwardRef<HTMLDivElement, any>(
     )
 );
 
+interface Props {
+    handleSelectFoundation: (value: string) => void;
+    errorFoundation: string;
+}
 
-const FoundationSelect = () => {
+
+const FoundationSelect = ({ errorFoundation, handleSelectFoundation }: Props) => {
 
     const [foundations, setFoundations] = useState([]);
 
@@ -37,11 +41,16 @@ const FoundationSelect = () => {
         <Select
             label="Fundación"
             itemComponent={FoundationSelectItem}
-            data={foundations.map(f => ({ value: f.id, label: f.name, ...f }))}
+            data={foundations.map((foundation) => ({ value: foundation.id, label: foundation.id, ...foundation }))}
             searchable
             clearable
             maxDropdownHeight={300}
             nothingFound="No hay fundaciones"
+            onSelect={(v) => {
+                const event = v.target as HTMLSelectElement;
+                handleSelectFoundation(event.value)
+            }}
+            error={errorFoundation}
         />
     );
 };

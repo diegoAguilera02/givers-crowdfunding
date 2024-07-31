@@ -1,7 +1,6 @@
 import {
     Anchor,
     Button,
-    Checkbox,
     Container,
     Divider,
     Group,
@@ -13,12 +12,13 @@ import {
     Title,
 } from '@mantine/core';
 import { Helmet } from "react-helmet";
-import { IconBrandFacebook, IconBrandGoogle } from "@tabler/icons-react";
+import { IconBrandGoogle } from "@tabler/icons-react";
 import { Link } from 'react-router-dom';
 
 import * as yup from 'yup';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/auth/AuthContext';
+import GiversLayoutGuest from '../../layout/GiversLayoutGuest';
 
 const validationRegisterSchema = yup.object().shape({
     name: yup.string().required('El nombre es requerido'),
@@ -76,7 +76,7 @@ const RegisterPage = () => {
     }
 
     return (
-        <>
+        <GiversLayoutGuest>
             <Helmet>
                 <title>Signup</title>
             </Helmet>
@@ -147,7 +147,7 @@ const RegisterPage = () => {
                     }
                 </Paper>
             </Container>
-        </>
+        </GiversLayoutGuest>
     );
 }
 

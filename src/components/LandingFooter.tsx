@@ -1,11 +1,11 @@
-import {ActionIcon, Container, createStyles, Group, rem, Stack, Text} from '@mantine/core';
+import { ActionIcon, Container, createStyles, Group, rem, Stack, Text } from '@mantine/core';
 import {
     IconBrandFacebook,
     IconBrandInstagram,
     IconBrandLinkedin,
     IconBrandTwitter
 } from '@tabler/icons-react';
-import {BrandName} from "./index";
+import { BrandName } from "./index";
 
 const useStyles = createStyles((theme) => ({
     footer: {
@@ -13,9 +13,8 @@ const useStyles = createStyles((theme) => ({
         paddingTop: `calc(${theme.spacing.xl} * 2)`,
         paddingBottom: `calc(${theme.spacing.xl} * 2)`,
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-        borderTop: `${rem(1)} solid ${
-            theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
-        }`,
+        borderTop: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
+            }`,
     },
 
     logo: {
@@ -105,9 +104,8 @@ const useStyles = createStyles((theme) => ({
         marginTop: theme.spacing.xl,
         paddingTop: theme.spacing.xl,
         paddingBottom: theme.spacing.xl,
-        borderTop: `${rem(1)} solid ${
-            theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-        }`,
+        borderTop: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
+            }`,
 
         [theme.fn.smallerThan('sm')]: {
             flexDirection: 'column',
@@ -120,7 +118,6 @@ const useStyles = createStyles((theme) => ({
         },
     },
 }));
-
 interface FooterLinksProps {
     data: {
         title: string;
@@ -128,8 +125,8 @@ interface FooterLinksProps {
     }[];
 }
 
-const LandingFooter = ({data}: FooterLinksProps) => {
-    const {classes} = useStyles();
+const LandingFooter = ({ data }: FooterLinksProps) => {
+    const { classes } = useStyles();
 
     const groups = data.map((group) => {
         const links = group.links.map((link, index) => (
@@ -157,10 +154,10 @@ const LandingFooter = ({data}: FooterLinksProps) => {
             <Container className={classes.inner} size="lg">
                 <div className={classes.logo}>
                     <Stack align="flex-start">
-                        <BrandName size={40}/>
-                        <Text size="sm">Givers is a crowdfunding website that lets you raise money for anything that
-                            matters to you. From personal causes and events to projects and more. We've helped people
-                            from all over the world raise millions online.
+                        <BrandName size={40} />
+                        <Text size="sm">Givers es un sitio web de financiación colectiva que te permite recaudar dinero para cualquier cosa que te importe. 
+                            Desde causas y eventos personales hasta proyectos 
+                            y más.
                         </Text>
                     </Stack>
                 </div>
@@ -168,21 +165,21 @@ const LandingFooter = ({data}: FooterLinksProps) => {
             </Container>
             <Container className={classes.afterFooter} size="lg">
                 <Text size="sm">
-                    © {new Date().getFullYear()} Givers. All rights reserved.
+                    © {new Date().getFullYear()} Givers. Todos los derechos reservados.
                 </Text>
 
                 <Group spacing={0} className={classes.social} position="right" noWrap>
                     <ActionIcon size="lg" component="a" href="#" target="_blank">
-                        <IconBrandTwitter size="20" stroke={2}/>
+                        <IconBrandTwitter size="20" stroke={2} />
                     </ActionIcon>
                     <ActionIcon size="lg" component="a" href="#" target="_blank">
-                        <IconBrandFacebook size="20" stroke={2}/>
+                        <IconBrandFacebook size="20" stroke={2} />
                     </ActionIcon>
                     <ActionIcon size="lg" component="a" href="#" target="_blank">
-                        <IconBrandInstagram size="20" stroke={2}/>
+                        <IconBrandInstagram size="20" stroke={2} />
                     </ActionIcon>
                     <ActionIcon size="lg" component="a" href="#" target="_blank">
-                        <IconBrandLinkedin size="20" stroke={2}/>
+                        <IconBrandLinkedin size="20" stroke={2} />
                     </ActionIcon>
                 </Group>
             </Container>

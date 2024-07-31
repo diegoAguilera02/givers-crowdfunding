@@ -79,6 +79,7 @@ const CampaignDetailsPage = (): JSX.Element => {
         const fetchData = async () => {
             try {
                 const campaign = await searchCampaign();
+                console.log(campaign);
                 setCampaign(campaign);
             } catch (error) {
                 // Manejar errores aquí, por ejemplo, establecer un estado de error
@@ -102,7 +103,7 @@ const CampaignDetailsPage = (): JSX.Element => {
                             <Stack>
                                 <Card padding="md" shadow="sm">
                                     <Card.Section>
-                                        <Image src={campaign?.multimedia[0].url} height={480} />
+                                        <Image src={campaign.multimedia[0]} height={480} />
                                     </Card.Section>
                                     <Stack mt="md">
                                         <Title>{campaign?.name}</Title>
@@ -111,31 +112,31 @@ const CampaignDetailsPage = (): JSX.Element => {
                                                 <Text size="sm">Campaña de recaudación de fondos creada por</Text>
                                                 <UnstyledButton component={Anchor}>
                                                     <Flex gap="xs" align="center">
-                                                        <Avatar src={campaign?.createdByImage} radius="xl" size="sm" />
-                                                        <Text size="sm">{campaign?.createdBy}</Text>
+                                                        {/* <Avatar src={campaign?.createdByImage} radius="xl" size="sm" /> */}
+                                                        {/* <Text size="sm">{campaign?.createdBy}</Text> */}
                                                     </Flex>
                                                 </UnstyledButton>
                                                 <IconSeparator size={18} />
-                                                <Text component={Anchor} size="sm">{campaign?.country}</Text>
+                                                {/* <Text component={Anchor} size="sm">{campaign?.country}</Text> */}
                                                 <IconSeparator size={18} />
-                                                <Text component={Anchor} size="sm">{campaign?.category}</Text>
+                                                {/* <Text component={Anchor} size="sm">{campaign?.category}</Text> */}
                                             </Flex> :
                                             <Stack>
                                                 <Flex gap="md">
                                                     <Text size="sm">Campaña de recaudación de fondos creada por</Text>
                                                     <UnstyledButton component={Anchor}>
                                                         <Flex gap="xs" align="center">
-                                                            <Avatar src={campaign?.createdByImage} radius="xl"
-                                                                size="sm" />
-                                                            <Text size="sm">{campaign?.createdBy}</Text>
+                                                            {/* <Avatar src={campaign?.createdByImage} radius="xl"
+                                                                size="sm" /> */}
+                                                            {/* <Text size="sm">{campaign?.createdBy}</Text> */}
                                                         </Flex>
                                                     </UnstyledButton>
                                                 </Flex>
                                                 <Group>
-                                                    <Text size="sm">Location
-                                                        - <Anchor>{campaign?.country}</Anchor></Text>
-                                                    <Text size="sm">Category
-                                                        - <Anchor>{campaign?.category}</Anchor></Text>
+                                                    <Text size="sm">Ubicación
+                                                        - Chile</Text>
+                                                    <Text size="sm">Categoría
+                                                        - <Anchor>Tecnología</Anchor></Text>
                                                 </Group>
                                             </Stack>
                                         }

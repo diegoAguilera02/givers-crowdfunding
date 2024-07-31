@@ -7,7 +7,7 @@ import { CampaignDetailsPage, CampaignsPage, HowItWorksPage } from "../../pages"
 
 export const authRoutes = [
     {
-        path: "landing",
+        path: "",
         element: <CampaignsPage />
     },
     {
@@ -24,6 +24,6 @@ export const authRoutes = [
     },
     {
         path: "/*",
-        element: <Navigate to={"/landing"} />
+        element: <Navigate to={""} />
     }
 ]

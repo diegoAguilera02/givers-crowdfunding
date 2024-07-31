@@ -23,14 +23,15 @@ import {
     IconReceipt2,
     IconTrophy
 } from "@tabler/icons-react";
-import { CampaignsTable, DonatorsTable, YearlyDonationChart } from "../components";
+import { CampaignsTable } from "../components";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 // import { DashboardLayout } from "../layout";
 import GiversLayout from "../layout/GiversLayout";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/auth/AuthContext";
 import FoundationsTable from "../components/FoundationsTable";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -64,7 +65,6 @@ const useStyles = createStyles((theme) => ({
 const DashboardPage = () => {
 
     const { user } = useContext(AuthContext)
-    const { classes } = useStyles();
 
     const paperProps: PaperProps = {
         p: "md",
@@ -85,99 +85,6 @@ const DashboardPage = () => {
                 <Container fluid my="xl">
                     <Stack spacing="xl">
                         <Title order={3}>Hola, {user.name}</Title>
-                        <SimpleGrid
-                            cols={4}
-                            breakpoints={[{ maxWidth: 'md', cols: 2, spacing: 'md' }, {
-                                maxWidth: 'sm',
-                                cols: 1,
-                                spacing: 'sm'
-                            }]}
-                        >
-                            <Paper {...paperProps}>
-                                <Group position="apart">
-                                    <Text size="xs" color="dimmed" className={classes.title}>
-                                        Donaciones Totales
-                                    </Text>
-                                    <IconReceipt2 className={classes.icon} size="1.4rem" stroke={1.5} />
-                                </Group>
-
-                                <Group align="flex-end" spacing="xs" mt={25}>
-                                    <Text className={classes.value}>$100,202.10</Text>
-                                    {/* eslint-disable-next-line no-constant-condition */}
-                                    <Text color={10 > 0 ? 'teal' : 'red'} fz="sm" fw={500} className={classes.diff}>
-                                        <span>10%</span>
-                                        <IconArrowUpRight size="1rem" stroke={1.5} />
-                                    </Text>
-                                </Group>
-
-                                <Text fz="xs" c="dimmed" mt={7}>
-                                    Comparado con el mes anterior
-                                </Text>
-                            </Paper>
-                            <Paper {...paperProps}>
-                                <Group position="apart">
-                                    <Text size="xs" color="dimmed" className={classes.title}>
-                                        Donaciones Totales
-                                    </Text>
-                                    <IconReceipt2 className={classes.icon} size="1.4rem" stroke={1.5} />
-                                </Group>
-
-                                <Group align="flex-end" spacing="xs" mt={25}>
-                                    <Text className={classes.value}>$1,202.10</Text>
-                                    {/* eslint-disable-next-line no-constant-condition */}
-                                    <Text color={-3 > 0 ? 'teal' : 'red'} fz="sm" fw={500} className={classes.diff}>
-                                        <span>30.1%</span>
-                                        <IconArrowDownRight size="1rem" stroke={1.5} />
-                                    </Text>
-                                </Group>
-
-                                <Text fz="xs" c="dimmed" mt={7}>
-                                    Comparado con ayer
-                                </Text>
-                            </Paper>
-                            <Paper {...paperProps}>
-                                <Group position="apart">
-                                    <Text size="xs" color="dimmed" className={classes.title}>
-                                        Donaciones promedio por campaña
-                                    </Text>
-                                    <IconFunction className={classes.icon} size="1.4rem" stroke={1.5} />
-                                </Group>
-
-                                <Group align="flex-end" spacing="xs" mt={25}>
-                                    <Text className={classes.value}>34%</Text>
-                                    {/* eslint-disable-next-line no-constant-condition */}
-                                    <Text color={10 > 0 ? 'teal' : 'red'} fz="sm" fw={500} className={classes.diff}>
-                                        <span>4.2%</span>
-                                        <IconArrowUpRight size="1rem" stroke={1.5} />
-                                    </Text>
-                                </Group>
-
-                                <Text fz="xs" c="dimmed" mt={7}>
-                                    Comparado con el mes anterior
-                                </Text>
-                            </Paper>
-                            <Paper {...paperProps}>
-                                <Group position="apart">
-                                    <Text size="xs" color="dimmed" className={classes.title}>
-                                        Campañas Activas
-                                    </Text>
-                                    <IconTrophy className={classes.icon} size="1.4rem" stroke={1.5} />
-                                </Group>
-
-                                <Group align="flex-end" spacing="xs" mt={25}>
-                                    <Text className={classes.value}>13</Text>
-                                    {/* eslint-disable-next-line no-constant-condition */}
-                                    <Text color={10 > 0 ? 'teal' : 'red'} fz="sm" fw={500} className={classes.diff}>
-                                        <span>11.1%</span>
-                                        <IconArrowUpRight size="1rem" stroke={1.5} />
-                                    </Text>
-                                </Group>
-
-                                <Text fz="xs" c="dimmed" mt={7}>
-                                    Comparado con el mes anterior
-                                </Text>
-                            </Paper>
-                        </SimpleGrid>
 
                         {/* Campaigns Table */}
                         <Paper {...paperProps}>
@@ -190,7 +97,7 @@ const DashboardPage = () => {
                                     <Button
                                         leftIcon={<IconPlus size={18} />}
                                         component={Link}
-                                        to="/panel/create-campaign"
+                                        to="/admin/create-campaign"
                                     >
                                         Crear una campaña
                                     </Button>
@@ -212,7 +119,7 @@ const DashboardPage = () => {
                                     <Button
                                         leftIcon={<IconPlus size={18} />}
                                         component={Link}
-                                        to="/panel/create-foundation"
+                                        to="/admin/create-foundation"
                                     >
                                         Crear una fundación
                                     </Button>

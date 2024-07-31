@@ -7,6 +7,9 @@ import { GiversRouter } from "./givers/GiversRouter";
 import { giversRoutes } from "./givers/giversRoutes";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth/AuthContext";
+import RoleProtectedRoute from "./RoleProtectedRoute";
+import { clientRoutes } from "./client/clientRoutes";
+import { adminRoutes } from "./admin/adminRoutes";
 // import CheckingAuth from "../ui/components/CheckingAuth";
 
 // import { useCheckAuth } from "../hooks/useCheckAuth";
@@ -19,18 +22,36 @@ const router = createBrowserRouter([
         children: authRoutes,
         errorElement: <><h2>ERROR</h2></>
     },
-    // Private Routes
+    // Private Routes for Users
     {
         path: "/panel/*",
-        element: <GiversRouter />,
-        children: giversRoutes,
+        element: (
+            <RoleProtectedRoute
+                component={GiversRouter}
+                allowedRoles={['Client']}
+            />
+        ),
+        children: clientRoutes,
+        errorElement: <><h2>ERROR</h2></>
+    },
+
+    // Private Routes for Admins
+    {
+        path: "/admin/*",
+        element: (
+            <RoleProtectedRoute
+                component={GiversRouter}
+                allowedRoles={['Admin']}
+            />
+        ),
+        children: adminRoutes,
         errorElement: <><h2>ERROR</h2></>
     }
 ]);
 
 
 export const AppRouter = () => {
-    const status = useContext(AuthContext);
+    // const status = useContext(AuthContext);
 
     // if (status === 'checking') return <CheckingAuth />
 

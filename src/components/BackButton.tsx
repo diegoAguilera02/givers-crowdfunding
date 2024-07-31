@@ -13,7 +13,7 @@ const BackButton = ({...others}: IProps) => {
                 return false;
             }}
         >
-            Go back
+            Página anterior
         </Button>
     );
 };

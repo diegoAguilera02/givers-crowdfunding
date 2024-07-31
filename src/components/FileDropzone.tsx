@@ -8,29 +8,27 @@ import { useState } from "react";
 interface IFileInputProps extends Pick<DropzoneProps, 'multiple'> {
     label: string
     description: string
-    multiple?: boolean
+    multiple?: boolean,
+    handleDropFile?: (files: File[]) => void
+    handleRejectFile?: (rejectedFiles: File[]) => void
 }
 
-const FileDropzone = ({ label, description, ...others }: IFileInputProps) => {
+const FileDropzone = ({ label, description, handleDropFile, handleRejectFile, ...others }: IFileInputProps) => {
     const theme = useMantineTheme()
-    const [files, setFiles] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
 
     const handleDrop = (dropFiles: File[]) => {
         if (dropFiles.length > 0) {
-            setFiles(dropFiles);
+            handleDropFile(dropFiles)
             setPreviews(dropFiles.map(file => URL.createObjectURL(file)));
         }
     };
-
 
     const handleReject = (rejectedFiles: File[]) => {
         if (rejectedFiles.length > 0) {
             console.log(rejectedFiles);
         }
     }
-
-    console.log(files);
     return (
         <>
             <Dropzone
@@ -78,22 +76,24 @@ const FileDropzone = ({ label, description, ...others }: IFileInputProps) => {
             </Dropzone>
 
             {previews.length > 0 && (
-                <div style={{ marginTop: 20 }}>
-                    <h3>Uploaded Images:</h3>
-                    <Group>
-                        {previews.map((src, index) => (
-                            <Image
-                                key={index}
-                                src={src}
-                                alt={`Preview ${index}`}
-                                width={100}
-                                height={100}
-                                fit="cover"
-                                radius="md"
-                            />
-                        ))}
-                    </Group>
-                </div>
+                <>
+                    <div style={{ marginTop: 20 }}>
+                        <h3>Imágenes Subidas:</h3>
+                        <Group>
+                            {previews.map((src, index) => (
+                                <Image
+                                    key={index}
+                                    src={src}
+                                    alt={`Preview ${index}`}
+                                    width={100}
+                                    height={100}
+                                    fit="cover"
+                                    radius="xs"
+                                />
+                            ))}
+                        </Group>
+                    </div>
+                </>
             )}
         </>
     );

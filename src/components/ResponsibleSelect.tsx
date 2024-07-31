@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { forwardRef, useEffect, useState } from 'react';
 import { Group, Select, Text } from "@mantine/core";
 import { getUsersSelect } from '../firebase/service';
@@ -44,9 +45,11 @@ const ResponsibleSelect = ({ handleSelectResponsible, errorResponsible }: Props)
             clearable
             maxDropdownHeight={300}
             nothingFound="No se encontró nada"
-            onSelect={(v) => handleSelectResponsible(v.target.value)}
+            onSelect={(v) => {
+                const event = v.target as HTMLSelectElement;
+                handleSelectResponsible(event.value)
+            }}
             error={errorResponsible}
-
         />
     );
 };

@@ -21,11 +21,11 @@ import {
     IconCopy,
     IconMail
 } from "@tabler/icons-react";
-import { ICampaign } from "../types";
 import { useMediaQuery } from "@mantine/hooks";
+import { Campaign } from "../interfaces/Campaign";
 
 interface IProps {
-    campaign?: ICampaign
+    campaign?: Campaign
     iconSize: number
     opened: boolean
     onClose: () => void

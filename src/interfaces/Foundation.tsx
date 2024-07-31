@@ -11,5 +11,5 @@ export interface Foundation {
     lng?: string;
     location?: GeoPoint;
     status?: boolean;
-    responsible: any;
+    responsible: string;
 }

@@ -8,8 +8,8 @@ import {
     Text,
     Container,
     Group,
-    Button, Divider,
-    Loader,
+    Button, 
+    Divider,
     List
 } from '@mantine/core';
 import { Helmet } from "react-helmet";
@@ -22,6 +22,7 @@ import * as yup from "yup";
 
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/auth/AuthContext";
+import GiversLayoutGuest from '../../layout/GiversLayoutGuest';
 
 const validationLoginSchema = yup.object().shape({
     email: yup.string().email('Ingrese un correo electrónico válido').required('El correo electrónico es requerido'),
@@ -30,7 +31,7 @@ const validationLoginSchema = yup.object().shape({
 
 
 const LoginPage = () => {
-    const { user, status, startGoogleSignIn, startLoginWithEmailAndPasssword } = useContext(AuthContext);
+    const { startGoogleSignIn, startLoginWithEmailAndPasssword } = useContext(AuthContext);
 
     const [formValues, setFormValues] = useState<{ email: string; password: string }>({
         email: '',
@@ -77,7 +78,8 @@ const LoginPage = () => {
 
 
     return (
-        <>
+        <GiversLayoutGuest>
+
             <Helmet>
                 <title>Login</title>
             </Helmet>
@@ -126,7 +128,7 @@ const LoginPage = () => {
                     </Group>
                     <Button fullWidth mt="xl" onClick={onLogin}>
                         Iniciar sesión
-                    </Button>                    
+                    </Button>
                     {
                         error && (
                             <List style={{ marginTop: 10 }}>
@@ -140,7 +142,7 @@ const LoginPage = () => {
                     }
                 </Paper>
             </Container>
-        </>
+        </GiversLayoutGuest >
     );
 }
 

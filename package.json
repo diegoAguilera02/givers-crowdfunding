@@ -34,6 +34,7 @@
     "@tiptap/react": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",
     "apexcharts": "^3.40.0",
+    "axios": "^1.7.2",
     "dayjs": "^1.11.7",
     "embla-carousel-react": "7.1.0",
     "firebase": "^10.12.2",

@@ -1,9 +1,8 @@
-import {useState} from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
 import {
-    ActionIcon,
     Anchor,
     Button,
-    Checkbox,
     Container,
     Drawer,
     DrawerProps,
@@ -13,47 +12,94 @@ import {
     NumberInput,
     Paper,
     PaperProps,
-    Popover,
     Radio,
     ScrollArea,
-    Slider,
     Stack,
     Text,
     TextInput,
     ThemeIcon,
-    Transition,
     useMantineTheme
 } from "@mantine/core";
 import {
-    IconBrandApple,
-    IconBrandGoogle,
-    IconCreditCard,
+    IconCash,
     IconCurrencyDollar,
-    IconInfoCircleFilled,
     IconShieldCheckFilled
 } from "@tabler/icons-react";
-import {CountrySelect} from "./index";
-import {ICampaign} from "../types";
+import * as yup from 'yup';
+import { Campaign } from '../interfaces/Campaign';
 
 interface IProps extends Pick<DrawerProps, 'opened' | 'onClose' | 'size'> {
-    campaign?: ICampaign
+    campaign?: Campaign
     iconSize: number
 }
 
-const DonationDrawer = ({campaign, iconSize, ...others}: IProps) => {
-    const [payment, setPayment] = useState('');
+const validationDonationSchema = yup.object().shape({
+    name: yup.string().required('El nombre es requerido'),
+    lastname: yup.string().required('El apellido es requerido'),
+    email: yup.string().required('El correo electrónico es requerido').email('El correo electrónico no es válido'),
+    payment: yup.string().required('El método de pago es requerido'),
+    amount: yup.number().required('El monto es requerido').min(1, 'El monto debe ser mayor a 0')
+});
+
+const DonationDrawer = ({ campaign, iconSize, ...others }: IProps) => {
+    const [formValues, setFormValues] = useState<{ name: string, lastname: string, email: string, amount: number, payment: string }>({
+        name: '',
+        lastname: '',
+        email: '',
+        amount: 0,
+        payment: ''
+    });
+
+    const [errorMessages, setErrorMessages] = useState<Record<string, string>>({});
+    const [error, setError] = useState<string | null>(null);
+
     const theme = useMantineTheme()
 
     const paperProps: PaperProps = {
         p: "md",
         withBorder: true,
-        sx: {backgroundColor: theme.white}
+        sx: { backgroundColor: theme.white }
     }
 
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.currentTarget;
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+    }
+
+    const isValidForm = async (): Promise<boolean> => {
+        try {
+            await validationDonationSchema.validate(formValues, { abortEarly: false });
+            return true;
+        } catch (error) {
+            const errors: Record<string, string> = {};
+            error.inner.forEach((err) => {
+                errors[err.path] = err.message;
+            });
+            setErrorMessages(errors);
+            return false;
+        }
+    }
+
+    const onCreateDonation = async () => {
+
+        console.log('press')
+
+        window.location.href = import.meta.env.VITE_API_URL_TRANSBANK_CREATE2 as string;
+        // const isValid = await isValidForm();
+
+        // if (isValid) {
+
+        //     // Call API
+        // }
+    }
     return (
         <Drawer
             position="bottom"
-            title="Make a Donation"
+            title=""
             size="100%"
             scrollAreaComponent={ScrollArea.Autosize}
             {...others}
@@ -61,143 +107,105 @@ const DonationDrawer = ({campaign, iconSize, ...others}: IProps) => {
             <Container>
                 <Stack>
                     <Flex gap="xs" align="center">
-                        <Image src={campaign?.mainImage} height={96} width={120} fit="contain" radius="sm"/>
-                        <Text>You&apos;re supporting <b>{campaign?.title}</b></Text>
+                        <Image src={campaign?.multimedia[0]} height={96} width={120} fit="contain" radius="sm" />
+                        <Text>Tu aporte a la <b>{campaign?.name}</b></Text>
                     </Flex>
                     <NumberInput
                         size="md"
-                        label="Enter your donation"
+                        label="Ingresa el monto de donación"
+                        name="amount"
+                        value={formValues.amount}
+                        onChange={(value) => handleChange({ currentTarget: { name: 'amount', value } } as any)}
                         precision={2}
-                        rightSection={<IconCurrencyDollar size={iconSize}/>}
+                        rightSection={<IconCurrencyDollar size={iconSize} />}
+                        error={errorMessages.amount}
+                        required
                     />
-                    <Paper {...paperProps}>
-                        <Text fw={500}>Tip Givers services</Text>
-                        <Text size="sm" my="xs">Givers has a 0% platform fee for organizers. Givers will continue
-                            offering its services
-                            thanks to donors who will leave an optional amount here:</Text>
-                        <Slider
-                            marks={[
-                                {value: 20, label: '20%'},
-                                {value: 50, label: '50%'},
-                                {value: 80, label: '80%'},
-                            ]}
-                            mb="lg"
-                        />
+                    <Paper
+                        p="md"
+                        radius="sm"
+                        mt="sm"
+                        {...paperProps}
+                    >
+                        <Stack sx={{ width: '100%' }}>
+                            <TextInput 
+                                label="Correo electrónico" 
+                                placeholder="Correo electrónico"
+                                value={formValues.email}
+                                onChange={handleChange}
+                                error={errorMessages.email}
+                                required    
+                            />
+                            <Group grow>
+                                <TextInput
+                                    label="Nombre"
+                                    placeholder="Nombre"
+                                    value={formValues.name}
+                                    onChange={handleChange}
+                                    error={errorMessages.name}
+                                    required
+                                />
+                                <TextInput
+                                    label="Apellidos"
+                                    placeholder="Apellidos"
+                                    value={formValues.lastname}
+                                    onChange={handleChange}
+                                    error={errorMessages.lastname}
+                                    required
+                                />
+                            </Group>
+                        </Stack>
                     </Paper>
                     <Paper {...paperProps}>
                         <Radio.Group
-                            name="paymentMethod"
-                            label="Payment method"
-                            value={payment}
-                            onChange={setPayment}
+                            name="payment"
+                            label="Método de pago"
+                            value={formValues.payment}
+                            onChange={(value) => handleChange({ currentTarget: { name: 'payment', value } } as any)}
                             mb="md"
                         >
                             <Group mt="sm">
                                 <Radio
                                     value="gpay"
-                                    label={<Group spacing="xs"><IconBrandGoogle size={iconSize}/><Text>Google Pay</Text></Group>}/>
-                                <Radio
-                                    value="applepay"
-                                    label={<Group spacing="xs"><IconBrandApple size={iconSize}/><Text>Apple
-                                        Pay</Text></Group>}/>
-                                <Radio
-                                    value="card"
-                                    label={<Group spacing="xs"><IconCreditCard size={iconSize}/><Text>Credit or
-                                        debit</Text></Group>}/>
+                                    label={<Group spacing="xs"><IconCash size={iconSize} /><Text>Webpay Transbank</Text></Group>} />
                             </Group>
                         </Radio.Group>
-                        <Transition
-                            mounted={payment === 'card'}
-                            transition="scale-y"
-                            duration={400}
-                            timingFunction="ease"
-                        >
-                            {(styles) =>
-                                <Paper
-                                    p="md"
-                                    radius="sm"
-                                    mt="sm"
-                                    style={styles}
-                                >
-                                    <Stack sx={{width: '100%'}}>
-                                        <TextInput label="Email address"/>
-                                        <Group grow>
-                                            <TextInput label="First name"/>
-                                            <TextInput label="Last name"/>
-                                        </Group>
-                                        <Checkbox label="Use as billing name"/>
-                                        <NumberInput label="Card number"/>
-                                        <Group grow>
-                                            <NumberInput label="MM/YY"/>
-                                            <NumberInput label="CVV"/>
-                                        </Group>
-                                        <TextInput label="Name on card"/>
-                                        <Group grow>
-                                            {/* <CountrySelect/> */}
-                                            <TextInput label="Postal code"/>
-                                        </Group>
-                                        <Checkbox label="Save card for future donations"/>
-                                    </Stack>
-                                </Paper>
-                            }
-                        </Transition>
                     </Paper>
+
                     <Paper {...paperProps}>
                         <Stack>
-                            <Group spacing={4}>
-                                <Checkbox label="Don't display my name publicly on the fundraiser."/>
-                                <Popover width={200} position="bottom" withArrow shadow="md">
-                                    <Popover.Target>
-                                        <ActionIcon color="primary" variant="subtle">
-                                            <IconInfoCircleFilled size={iconSize}/>
-                                        </ActionIcon>
-                                    </Popover.Target>
-                                    <Popover.Dropdown>
-                                        <Text size="sm">Your name will only be visible to the organizer, any team
-                                            members and the beneficiary</Text>
-                                    </Popover.Dropdown>
-                                </Popover>
-                            </Group>
-                            <Checkbox
-                                label="Get occasional marketing updates from GoFundMe. You may unsubscribe at any time."/>
-                        </Stack>
-                    </Paper>
-                    <Paper {...paperProps}>
-                        <Stack>
-                            <Text fw={700} size="lg">Your donation</Text>
+                            <Text fw={700} size="lg">Tu donación</Text>
                             <Group position="apart">
-                                <Text>Your donation</Text>
-                                <Text fw={500}>$0.00</Text>
+                                <Text>Tu donación</Text>
+                                <Text fw={500}>${formValues.amount}</Text>
                             </Group>
-                            <Group position="apart">
+                            {/* <Group position="apart">
                                 <Text>Givers tip</Text>
                                 <Text fw={500}>$0.00</Text>
-                            </Group>
+                            </Group> */}
                             <Group position="apart">
-                                <Text>Total due today</Text>
-                                <Text fw={500}>$0.00</Text>
+                                <Text>Total</Text>
+                                <Text fw={500}>$0</Text>
                             </Group>
-                            <Button size="lg">Donate Now</Button>
+                            <Button onClick={onCreateDonation} size="lg">Ir al pago</Button>
                         </Stack>
                     </Paper>
                     <Paper {...paperProps}>
                         <Stack>
-                            <Text size="sm">By continuing, you agree with <Anchor>Givers terms</Anchor> and <Anchor>privacy
-                                notice.</Anchor></Text>
-                            <Text size="sm">Learn more about <Anchor>pricing and fees.</Anchor></Text>
+                            <Text size="sm">Al continuar, aceptas los <Anchor>términos de Givers</Anchor> y el <Anchor>aviso de privacidad.</Anchor></Text>
+                            <Text size="sm">Aprende más sobre <Anchor>precios y tarifas.</Anchor></Text>
                             <Flex gap="sm">
                                 <ThemeIcon size="lg" variant="light" color="blue">
-                                    <IconShieldCheckFilled size={18}/>
+                                    <IconShieldCheckFilled size={18} />
                                 </ThemeIcon>
-                                <Text size="sm">We guarantee you a full refund for up to a year in the rare case that
-                                    fraud occurs.&nbsp;<Anchor>See our Givers Giving Guarantee.</Anchor>
+                                <Text size="sm">Te garantizamos un reembolso completo hasta por un año en el raro caso de que ocurra un fraude.&nbsp;<Anchor>Consulta nuestra Garantía de Donación de Givers.</Anchor>
                                 </Text>
                             </Flex>
                         </Stack>
                     </Paper>
                 </Stack>
-            </Container>
-        </Drawer>
+            </Container >
+        </Drawer >
     );
 };
 

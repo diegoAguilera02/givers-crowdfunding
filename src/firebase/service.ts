@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // firebaseService.ts
 
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { Campaign } from "../interfaces/Campaign";
 import { Foundation } from "../interfaces/Foundation";
 import { User } from "../interfaces/User";
-import { FirebaseDB } from "./config";
+import { FirebaseDB, FirebaseStorage } from "./config";
 import {
   collection,
   doc,
@@ -14,6 +17,8 @@ import {
   where,
   GeoPoint
 } from "firebase/firestore";
+
+import axios from 'axios';
 
 export const addDocument = async (collectionName: string, data: any) => {
   try {
@@ -143,7 +148,7 @@ export const getCampaign = async (id: string) => {
     const docSnapshot = await getDoc(docRef);
 
     if (docSnapshot.exists()) {
-      const { name, description, initDate, endDate, isCause, isExperience, cumulativeAmount, requestAmount, donorsCount, multimedia, foundation, createdAt } = docSnapshot.data();
+      const { name, description, initDate, endDate, isCause, isExperience, cumulativeAmount, requestAmount, donorsCount, multimedia, foundation, category, createdAt } = docSnapshot.data();
       return {
         id: docSnapshot.id,
         name,
@@ -157,6 +162,7 @@ export const getCampaign = async (id: string) => {
         donorsCount,
         multimedia,
         foundation,
+        category,
         createdAt
       };
     } else {
@@ -214,6 +220,28 @@ export const getCategories = async () => {
   }
 }
 
+export const getCategoriesSelect = async () => {
+  try {
+    const q = query(collection(FirebaseDB, "categories"));
+
+    const querySnapshot = await getDocs(q);
+
+    const categories = [];
+    querySnapshot.forEach((doc) => {
+
+      const { name } = doc.data();
+      categories.push({
+        id: doc.id,
+        name
+        // ...doc.data(),
+      });
+    });
+    return categories;
+  } catch (error) {
+    console.error("Error getting documents: ", error);
+  }
+}
+
 export const addFoundation = async (data: Foundation) => {
   try {
 
@@ -247,5 +275,99 @@ export const addFoundation = async (data: Foundation) => {
   } catch (e) {
     console.error("Error adding document: ", e);
   }
+}
+
+export const addCampaign = async (data: Campaign) => {
+  try {
+
+    const { name,
+      description,
+      initDate,
+      endDate,
+      isCause,
+      isExperience,
+      requestAmount,
+      multimedia,
+      foundation,
+      category } = data;
+
+
+    // Convert foundation ID to a Firestore reference
+    const foundationRef = doc(FirebaseDB, 'foundations', foundation);
+
+    // Convert category ID to a Firestore reference
+    const categoryRef = doc(FirebaseDB, 'categories', category);
+
+
+    // Upload multimedia files to Firebase Storage
+    const uploadedFiles = await Promise.all(multimedia.map(async (file: File) => {
+      const url = await uploadFile(file, `campaigns/${name}/${file.name}`);
+      return url;
+    }));
+
+
+    const response = await addDoc(collection(FirebaseDB, 'campaigns'), {
+      name,
+      description,
+      initDate,
+      endDate,
+      isCause,
+      isExperience,
+      requestAmount,
+      cumulativeAmount: 0,
+      donorsCount: 0,
+      status: true,
+      multimedia: uploadedFiles,
+      foundation: foundationRef,
+      category: categoryRef,
+      createdAt: new Date(),
+    });
+
+    console.log(response);
+    return {
+      success: true
+    };
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}
+
+
+export const uploadFile = async (file: File, path: string): Promise<string> => {
+  try {
+    const storageRef = ref(FirebaseStorage, path);
+    const snapshot = await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    return downloadURL;
+  } catch (error) {
+    console.error("Error uploading file: ", error);
+    throw error;
+  }
+};
+
+
+
+export async function webpayCreateOrder(data: any) {
+  const response = await axios.post(`${import.meta.env.VITE_API_URL_TRANSBANK_CREATE}`, { amount: 69000 }, {
+    headers: {
+      orderId: "J2tb5o55z4E1TmfjpwFF",
+      amount: 69000,
+      status: "INITIALIZED",
+      os: "ANDROID"
+    }
+  })
+
+  return response;
+}
+export async function webpayResponse(data) {
+
+
+  const respuesta = await fetch(`${import.meta.env.VITE_API_URL_LOCAL}webpay-response`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: { 'content-type': 'application/json' }
+  })
+  return respuesta.json()
+
 }
 
