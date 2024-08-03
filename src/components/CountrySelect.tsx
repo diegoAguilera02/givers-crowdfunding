@@ -32,7 +32,10 @@ const CountrySelect = ({ handleSelectCountry, errorCountry }: Props) => {
             label="País"
             itemComponent={CountrySelectItem}
             data={countriesData.data.map(c => ({ value: c.name, label: c.name, ...c }))}
-            onSelect={(value) => handleSelectCountry(value.target.value)}
+            onSelect={(v) => {
+                const event = v.target as HTMLSelectElement;
+                handleSelectCountry(event.value)
+            }}
             searchable
             clearable
             maxDropdownHeight={300}

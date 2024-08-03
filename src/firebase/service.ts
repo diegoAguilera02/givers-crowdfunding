@@ -368,7 +368,7 @@ export const addFoundation = async (data: Foundation) => {
     // Convert responsible ID to a Firestore reference
     const userRef = doc(FirebaseDB, 'users', responsible);
 
-    const response = await addDoc(collection(FirebaseDB, 'foundations'), {
+    await addDoc(collection(FirebaseDB, 'foundations'), {
       name,
       fono,
       country,
@@ -427,7 +427,7 @@ export const addCampaign = async (data: Campaign) => {
     }));
 
 
-    const response = await addDoc(collection(FirebaseDB, 'campaigns'), {
+    await addDoc(collection(FirebaseDB, 'campaigns'), {
       name,
       description,
       initDate,

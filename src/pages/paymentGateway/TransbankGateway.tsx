@@ -9,7 +9,7 @@ interface WebpayData {
 
 export async function loader() {
     try {
-        const data = await webpayCreateOrder({ amount: 10000 });
+        const data = await webpayCreateOrder();
         return data;
     } catch (error) {
         console.error('Error creating order:', error);

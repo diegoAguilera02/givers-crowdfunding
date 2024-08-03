@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-    ActionIcon,
-    Avatar,
     Box,
     BoxProps,
     Burger,
@@ -17,14 +16,9 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
-    IconBell,
     IconChevronDown,
-    IconHeart,
     IconLogout,
-    IconMessage,
-    IconSearch,
-    IconSettings,
-    IconStar,
+    IconSettings
 } from '@tabler/icons-react';
 import { useContext, useState } from "react";
 import { AppLinks, BrandName, SearchDrawer } from "./index";
@@ -141,14 +135,6 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-// const user = {
-//     "name": "Jane Spoonfighter",
-//     "email": "janspoon@fighter.dev",
-//     "image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-// }
-
-const ICON_SIZE = 18
-
 type IProps = BoxProps
 
 const AppNavbar = ({ ...others }: IProps) => {
@@ -157,9 +143,10 @@ const AppNavbar = ({ ...others }: IProps) => {
     const { classes, theme, cx } = useStyles();
     const [userMenuOpened, setUserMenuOpened] = useState(false);
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
-    const [searchOpened, { toggle: toggleSearchDrawer, close: closeSearchDrawer }] = useDisclosure(false);
+    const [searchOpened, { close: closeSearchDrawer }] = useDisclosure(false);
     const matchesMobile = useMediaQuery('(max-width: 600px)');
 
+    
     return (
         <Box {...others}>
             <Header

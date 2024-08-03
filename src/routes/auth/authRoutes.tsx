@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import LoginPage from "../../pages/auth/Login";
 import RegisterPage from "../../pages/auth/Register";
-import { CampaignDetailsPage, CampaignsPage, HowItWorksPage } from "../../pages";
+import { CampaignDetailsPage, CampaignsPage } from "../../pages";
 
 
 

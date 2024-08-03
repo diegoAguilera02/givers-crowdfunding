@@ -1,12 +1,8 @@
 
 import { Navigate } from "react-router-dom";
-import { CreateCampaignPage, DashboardPage } from "../../pages";
+import { CreateCampaignPage } from "../../pages";
 import CreateFoundationPage from "../../pages/admin/CreateFoundation";
 export const giversRoutes = [
-    {
-        path: "dashboard",
-        element: <DashboardPage />
-    },
     {
         path: "create-campaign",
         element: <CreateCampaignPage />

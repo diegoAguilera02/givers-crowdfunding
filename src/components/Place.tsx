@@ -1,6 +1,6 @@
 /* eslint-disable no-unsafe-optional-chaining */
 import { useRef } from "react";
-import { StandaloneSearchBox, LoadScript } from "@react-google-maps/api";
+import { StandaloneSearchBox, LoadScript, Libraries } from "@react-google-maps/api";
 import { TextInput } from "@mantine/core";
 
 
@@ -8,7 +8,7 @@ interface Props {
     updateAddress: (address: string, lat: string, lng: string) => void;
 }
 
-const libraries = ["places"]; // Define libraries outside the component
+const libraries: Libraries = ["places"]; // Define libraries outside the component
 
 const GooglePlace = ({ updateAddress }: Props) => {
     const inputRef = useRef<google.maps.places.SearchBox | null>(null);
@@ -17,13 +17,10 @@ const GooglePlace = ({ updateAddress }: Props) => {
         const [place] = inputRef.current?.getPlaces();
 
         if (place) {
-            // console.log(place.formatted_address);
-            // console.log(place.geometry?.location.lat());
-            // console.log(place.geometry?.location.lng());
-
-            updateAddress(place.formatted_address,
-                place.geometry?.location.lat().toString(),
-                place.geometry?.location.lng().toString());
+            updateAddress(
+                place.formatted_address || '',
+                place.geometry?.location.lat().toString() || '',
+                place.geometry?.location.lng().toString() || '');
         }
 
     }

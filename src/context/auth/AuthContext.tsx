@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, useEffect, useReducer, useState } from "react";
+import { createContext, ReactNode, useEffect, useReducer, useState } from "react";
 import { AuthState, authReducer } from "./authReducer";
 
 import { signInWithGoogle, loginWithEmailAndPassword, logoutFirebase } from "../../firebase/providers";
@@ -26,11 +26,14 @@ const authInitialState: AuthState = {
     user: null,
 }
 
+interface AuthProviderProps {
+    children: ReactNode;
+}
 
 export const AuthContext = createContext({} as AuthContextProps);
 
 
-export const AuthProvider: React.FC = ({ children }: any) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: any) => {
 
     const [state, dispatch] = useReducer(authReducer, authInitialState);
     const [loading, setLoading] = useState<boolean>(true);

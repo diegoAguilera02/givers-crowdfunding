@@ -1,27 +1,18 @@
 import {
     Box,
-    Button,
     Card,
     Container,
-    Flex,
     Paper,
     PaperProps,
     Stack,
-    Text,
     Title,
     TitleProps
 } from "@mantine/core";
-import {
-    IconPlus,
-} from "@tabler/icons-react";
-import { CampaignsTable, DonatorsTable, YearlyDonationChart } from "../components";
+import { DonatorsTable } from "../components";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
-// import { DashboardLayout } from "../layout";
 import GiversLayout from "../layout/GiversLayout";
 import { useContext} from "react";
 import { AuthContext } from "../context/auth/AuthContext";
-import FoundationsTable from "../components/FoundationsTable";
 
 const DashboardClientPage = () => {
 
@@ -46,28 +37,6 @@ const DashboardClientPage = () => {
                 <Container fluid my="xl">
                     <Stack spacing="xl">
                         <Title order={3}>Hola, {user.name}</Title>
-
-                        {/* Campaigns Table */}
-                        {/* <Paper {...paperProps}>
-                            <Card.Section mb="lg">
-                                <Flex align="center" justify="space-between">
-                                    <Box>
-                                        <Title {...subTitleProps}>Campañas</Title>
-                                        <Text size="sm">Gestiona tus campañas</Text>
-                                    </Box>
-                                    <Button
-                                        leftIcon={<IconPlus size={18} />}
-                                        component={Link}
-                                        to="/admin/create-campaign"
-                                    >
-                                        Crear una campaña
-                                    </Button>
-                                </Flex>
-                            </Card.Section>
-                            <Card.Section>
-                                <CampaignsTable />
-                            </Card.Section>
-                        </Paper> */}
 
                         {/* User Donators Table */}
                         <Paper {...paperProps}>

@@ -13,12 +13,8 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import {
-    IconHeart,
-    IconMessage,
     IconSettings,
-    IconStar,
 } from '@tabler/icons-react';
-import { useState } from 'react';
 import { AppLinks, BrandName, SearchDrawer } from '..';
 import AppLinksGuest from '../AppLinksGuest';
 
@@ -147,7 +143,6 @@ const AppNavbarGuest = ({ ...others }: IProps) => {
 
     // const { user, startLogout } = useContext(AuthContext);
     const { classes, theme } = useStyles();
-    const [setUserMenuOpened] = useState(false);
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const [searchOpened, { close: closeSearchDrawer }] = useDisclosure(false);
     const matchesMobile = useMediaQuery('(max-width: 600px)');

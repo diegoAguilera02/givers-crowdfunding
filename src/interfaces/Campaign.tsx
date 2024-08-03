@@ -18,5 +18,5 @@ export interface Campaign {
     category: any;
     foundation: any;
     responsible: any;
-    createdBy: any;
+    createdBy?: any;
 }

@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
     Button,
-    ButtonProps,
     CopyButton,
     Drawer,
     Flex,
@@ -12,14 +12,8 @@ import {
     Tooltip
 } from "@mantine/core";
 import {
-    IconBrandFacebook,
-    IconBrandInstagram,
-    IconBrandLinkedin,
-    IconBrandTwitter,
     IconCheck,
-    IconCode,
     IconCopy,
-    IconMail
 } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { Campaign } from "../interfaces/Campaign";
@@ -33,11 +27,6 @@ interface IProps {
 
 const ShareModal = ({ campaign, iconSize, ...others }: IProps) => {
     const matchesMobile = useMediaQuery('(max-width: 768px)');
-
-    const buttonProps: ButtonProps = {
-        variant: "light",
-        color: 'secondary'
-    }
 
     return (
         (matchesMobile ?
