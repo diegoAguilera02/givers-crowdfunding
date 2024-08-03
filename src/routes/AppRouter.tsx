@@ -4,9 +4,6 @@ import { AuthRouter } from "./auth/AuthRouter";
 import { authRoutes } from "./auth/authRoutes";
 
 import { GiversRouter } from "./givers/GiversRouter";
-import { giversRoutes } from "./givers/giversRoutes";
-import { useContext } from "react";
-import { AuthContext } from "../context/auth/AuthContext";
 import RoleProtectedRoute from "./RoleProtectedRoute";
 import { clientRoutes } from "./client/clientRoutes";
 import { adminRoutes } from "./admin/adminRoutes";

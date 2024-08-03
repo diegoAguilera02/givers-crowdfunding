@@ -1,12 +1,12 @@
-import { CreateCampaignPage, DashboardPage } from "../../pages";
-import CreateFoundationPage from "../../pages/CreateFoundation";
+import { CreateCampaignPage, DashboardAdminPage } from "../../pages";
+import CreateFoundationPage from "../../pages/admin/CreateFoundation";
 
 
 
 export const adminRoutes = [
     {
         path: "dashboard",
-        element: <DashboardPage />
+        element: <DashboardAdminPage />
     },
     {
         path: "create-campaign",

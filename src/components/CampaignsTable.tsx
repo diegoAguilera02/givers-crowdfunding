@@ -1,4 +1,3 @@
-import { ICampaign } from "../types";
 import { Avatar, Group, Text } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import { useEffect, useState } from "react";
@@ -15,7 +14,7 @@ const CampaignsTable = () => {
 
     useEffect(() => {
 
-        const chargedFoundations = async () => {
+        const chargedCampaigns = async () => {
             try {
                 const response = await getCampaigns();
                 return response;
@@ -27,7 +26,7 @@ const CampaignsTable = () => {
 
         const fetchData = async () => {
             try {
-                const campaigns = await chargedFoundations();
+                const campaigns = await chargedCampaigns();
                 setRecords(campaigns);
                 setIsLoading(false);
             } catch (error) {
@@ -49,15 +48,22 @@ const CampaignsTable = () => {
                 columns={[
                     {
                         accessor: 'createdBy',
-                        render: ({ createdBy, createdByImage }: ICampaign) =>
+                        title: 'Creado por',
+                        render: ({ createdBy }) =>
                             <Group>
-                                <Avatar src={createdByImage} alt={`${createdBy} profile avatar`} size="sm" radius="xl" />
-                                <Text>{createdBy}</Text>
+                                <Avatar src={createdBy.photoURL ? createdBy.photoURL : ''} alt={`${createdBy ? createdBy.name : 'default'} profile avatar`} size="sm" radius="xl" />
+                                <Text>{createdBy ? createdBy.name : ''}</Text>
                             </Group>
                     },
-                    // { accessor: 'name', title: 'Título' },
-                    { accessor: 'name', title: 'Título' },
-                    { accessor: 'description', title: 'Descripción' },
+                    {
+                        accessor: 'name', 
+                        title: 'Nombre',
+                    },
+                    {
+                        accessor: 'foundation',
+                        title: 'Fundación',
+                        render: ({ foundation }) => foundation.name
+                    },
                     {
                         accessor: 'cumulativeAmount', title: 'Monto acumulado',
                         render: ({ cumulativeAmount }) => formattingToCLPNumber(cumulativeAmount)

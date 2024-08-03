@@ -1,7 +1,6 @@
 import { DataTable } from "mantine-datatable";
 import { useEffect, useState } from "react";
 import { getFoundations } from "../firebase/service";
-import { Transition } from "@mantine/core";
 import LoadingSpinnerTable from "./LoadingSpinnerTable";
 
 const PAGE_SIZE = 10;
@@ -11,7 +10,6 @@ const FoundationsTable = () => {
     const [page, setPage] = useState(1);
     const [records, setRecords] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [showTable, setShowTable] = useState(false);
 
     useEffect(() => {
 
@@ -29,7 +27,6 @@ const FoundationsTable = () => {
             try {
                 const foundations = await chargedFoundations();
                 setRecords(foundations);
-                setShowTable(true);
                 setIsLoading(false);
             } catch (error) {
                 // Manejar errores aquí, por ejemplo, establecer un estado de error
@@ -54,8 +51,17 @@ const FoundationsTable = () => {
                     { accessor: 'name', title: 'Nombre' },
                     { accessor: 'city', title: 'Ciudad' },
                     { accessor: 'address', title: 'Dirección' },
-                    // { accessor: 'responsible', title: 'Responsable' },
                     { accessor: 'fono', title: 'Teléfono' },
+                    { 
+                        accessor: 'responsibleName', 
+                        title: 'Nombre Responsable',
+                        render: ({responsibleName}) => responsibleName 
+                    },
+                    { 
+                        accessor: 'responsibleEmail', 
+                        title: 'Correo electrónico Responsable',
+                        render: ({responsibleEmail}) => responsibleEmail 
+                    },
                 ]}
                 records={records}
                 totalRecords={records.length}

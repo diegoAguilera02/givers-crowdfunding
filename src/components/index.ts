@@ -7,7 +7,6 @@ import LandingFooter from "./LandingFooter";
 import BrandName from "./BrandName";
 import UserCard from "./UserCard";
 import ContactCard from "./ContactCard";
-import UserButton from "./UserButton";
 import AppLinks from "./AppLinks";
 import CampaignsTable from "./CampaignsTable";
 import DonatorsTable from "./DonatorsTable";
@@ -34,7 +33,6 @@ export {
     BrandName,
     UserCard,
     ContactCard,
-    UserButton,
     AppLinks,
     CampaignsTable,
     DonatorsTable,

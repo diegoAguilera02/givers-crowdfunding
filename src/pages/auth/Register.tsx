@@ -29,7 +29,7 @@ const validationRegisterSchema = yup.object().shape({
 
 const RegisterPage = () => {
 
-    const { startCreatingUserWithEmailAndPassword } = useContext(AuthContext);
+    const { startCreatingUserWithEmailAndPassword, startGoogleSignIn } = useContext(AuthContext);
 
     const [formValues, setFormValues] = useState<{ name: string; email: string; password: string }>({
         name: '',
@@ -96,7 +96,7 @@ const RegisterPage = () => {
 
                 <Paper withBorder shadow="md" p={30} mt={30} radius="md">
                     <Group grow mb="md" mt="md">
-                        <Button radius="xl" leftIcon={<IconBrandGoogle size={18} />}>Google</Button>
+                        <Button onClick={startGoogleSignIn} radius="xl" leftIcon={<IconBrandGoogle size={18} />}>Google</Button>
                     </Group>
                     <Divider label="O continua con tu correo electrónico" labelPosition="center" my="lg" />
                     <TextInput

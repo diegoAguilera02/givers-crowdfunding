@@ -1,4 +1,3 @@
-import HomePage from "./Home.tsx";
 import Error404Page from "./Error404.tsx";
 import HowItWorksPage from "./HowItWorks.tsx";
 import CampaignsPage from "./Campaigns";
@@ -6,11 +5,11 @@ import CampaignDetailsPage from "./CampaignDetails";
 import DetailError404Page from "./DetailError404";
 import LoginPage from "./auth/Login.tsx";
 import SignupPage from "./auth/Register.tsx";
-import DashboardPage from "./Dashboard";
-import CreateCampaignPage from "./CreateCampaign";
+import DashboardAdminPage from './DashboardAdmin.tsx';
+import DashboardClientPage from './DashboardClient.tsx';
+import CreateCampaignPage from "./admin/CreateCampaign.tsx";
 
 export {
-    HomePage,
     Error404Page,
     HowItWorksPage,
     CampaignsPage,
@@ -18,6 +17,7 @@ export {
     DetailError404Page,
     LoginPage,
     SignupPage,
-    DashboardPage,
+    DashboardAdminPage,
+    DashboardClientPage,
     CreateCampaignPage
 }

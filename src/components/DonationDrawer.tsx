@@ -51,7 +51,7 @@ const DonationDrawer = ({ campaign, iconSize, ...others }: IProps) => {
     });
 
     const [errorMessages, setErrorMessages] = useState<Record<string, string>>({});
-    const [error, setError] = useState<string | null>(null);
+    // const [error, setError] = useState<string | null>(null);
 
     const theme = useMantineTheme()
 
@@ -86,15 +86,13 @@ const DonationDrawer = ({ campaign, iconSize, ...others }: IProps) => {
 
     const onCreateDonation = async () => {
 
-        console.log('press')
+        const isValid = isValidForm();
+        if(!isValid){
+            console.log('Formulario enviado');
 
-        window.location.href = import.meta.env.VITE_API_URL_TRANSBANK_CREATE2 as string;
-        // const isValid = await isValidForm();
-
-        // if (isValid) {
-
-        //     // Call API
-        // }
+            // Call API
+            // window.location.href = import.meta.env.VITE_API_URL_TRANSBANK_CREATE2 as string;
+        }
     }
     return (
         <Drawer

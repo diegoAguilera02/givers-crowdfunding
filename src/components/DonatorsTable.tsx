@@ -1,37 +1,69 @@
-import {useEffect, useState} from "react";
-import campaignsData from "../data/Campaigns.json";
-import {DataTable} from "mantine-datatable";
-import {ICampaign} from "../types";
-import {Avatar, Group, Text} from "@mantine/core";
+import { useEffect, useState } from "react";
+import { DataTable } from "mantine-datatable";
+import LoadingSpinnerTable from "./LoadingSpinnerTable";
+import { getDonorsByUser } from "../firebase/service";
+import { formattingToCLPNumber } from "../helpers/formatCurrency";
 
 const PAGE_SIZE = 10;
 
 const DonatorsTable = () => {
     const [page, setPage] = useState(1);
-    const [records, setRecords] = useState(campaignsData.data.slice(0, PAGE_SIZE));
+    const [records, setRecords] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const from = (page - 1) * PAGE_SIZE;
-        const to = from + PAGE_SIZE;
-        setRecords(campaignsData.data.slice(from, to));
-    }, [page]);
+
+        const chargedDonors = async () => {
+            try {
+                const response = await getDonorsByUser();
+                return response;
+            } catch (error) {
+                console.error("Error getting documents: ", error);
+                throw error; // Re-lanza el error para que pueda ser capturado por el caller
+            }
+        };
+
+        const fetchData = async () => {
+            try {
+                const donors = await chargedDonors();
+                setRecords(donors);
+                setIsLoading(false);
+            } catch (error) {
+                // Manejar errores aquí, por ejemplo, establecer un estado de error
+                console.error("Failed to fetch donors: ", error);
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (isLoading) {
+        return <LoadingSpinnerTable />;
+    }
 
     return (
         <DataTable
             columns={[
                 {
-                    accessor: 'createdBy',
-                    render: ({createdBy, createdByImage}: ICampaign) =>
-                        <Group>
-                            <Avatar src={createdByImage} alt={`${createdBy} profile avatar`} size="sm" radius="xl"/>
-                            <Text>{createdBy}</Text>
-                        </Group>
+                    accessor: 'campaign',
+                    title: 'Nombre de Campaña',
+                    render: ({campaign}) => campaign.name
                 },
-                {accessor: 'amountRaised'},
-                {accessor: 'country'}
+                {
+                    accessor: 'contributionAmount',
+                    title: 'Monto Donado',
+                    render: ({ contributionAmount }) => formattingToCLPNumber(contributionAmount)
+                },
+                {
+                    accessor: 'dateContribution',
+                    title: 'Fecha de Donación',
+                    render: ({ dateContribution }) => new Date(dateContribution.seconds * 1000).toLocaleDateString(),
+                }
             ]}
             records={records}
-            totalRecords={campaignsData.data.length}
+            totalRecords={records.length}
+            noRecordsText="No hay registros"
             recordsPerPage={PAGE_SIZE}
             page={page}
             onPageChange={(p) => setPage(p)}

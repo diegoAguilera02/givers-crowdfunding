@@ -14,7 +14,7 @@ import {
 import {
     IconPlus,
 } from "@tabler/icons-react";
-import { CampaignsTable } from "../components";
+import { CampaignsTable, DonatorsTable, YearlyDonationChart } from "../components";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 // import { DashboardLayout } from "../layout";
@@ -23,7 +23,7 @@ import { useContext} from "react";
 import { AuthContext } from "../context/auth/AuthContext";
 import FoundationsTable from "../components/FoundationsTable";
 
-const DashboardAdminPage = () => {
+const DashboardClientPage = () => {
 
     const { user } = useContext(AuthContext)
 
@@ -48,7 +48,7 @@ const DashboardAdminPage = () => {
                         <Title order={3}>Hola, {user.name}</Title>
 
                         {/* Campaigns Table */}
-                        <Paper {...paperProps}>
+                        {/* <Paper {...paperProps}>
                             <Card.Section mb="lg">
                                 <Flex align="center" justify="space-between">
                                     <Box>
@@ -67,38 +67,16 @@ const DashboardAdminPage = () => {
                             <Card.Section>
                                 <CampaignsTable />
                             </Card.Section>
-                        </Paper>
+                        </Paper> */}
 
-                        {/* Foundations Table */}
+                        {/* User Donators Table */}
                         <Paper {...paperProps}>
-                            <Card.Section mb="lg">
-                                <Flex align="center" justify="space-between">
-                                    <Box>
-                                        <Title {...subTitleProps}>Fundaciones</Title>
-                                        <Text size="sm">Gestiona tus fundaciones</Text>
-                                    </Box>
-                                    <Button
-                                        leftIcon={<IconPlus size={18} />}
-                                        component={Link}
-                                        to="/admin/create-foundation"
-                                    >
-                                        Crear una fundación
-                                    </Button>
-                                </Flex>
-                            </Card.Section>
                             <Card.Section>
-                                <FoundationsTable />
-                            </Card.Section>
-                        </Paper>
-
-                        {/* Donators Table */}
-                        {/* <Paper {...paperProps}>
-                            <Card.Section>
-                                <Title {...subTitleProps}>Top Colaboradores</Title>
+                                <Title {...subTitleProps}>Listado de Donaciones Realizadas</Title>
                                 <DonatorsTable />
                             </Card.Section>
                             <Card.Section></Card.Section>
-                        </Paper> */}
+                        </Paper>
 
                         {/* Yearly Donation Chart */}
                         {/* <Paper {...paperProps}>
@@ -112,4 +90,4 @@ const DashboardAdminPage = () => {
     );
 };
 
-export default DashboardAdminPage;
+export default DashboardClientPage;

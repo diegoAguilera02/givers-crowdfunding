@@ -7,12 +7,14 @@ import {
     Group,
     Image,
     PaperProps,
+    Progress,
     Stack,
     Text,
 } from '@mantine/core';
 import { Link } from "react-router-dom";
 import { Campaign } from '../interfaces/Campaign';
 import { formattingToCLPNumber } from '../helpers/formatCurrency';
+import { calculatePercentage, calculatePercentageString } from '../helpers/percentageCampaign';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -59,7 +61,7 @@ const CampaignCard = ({ data, showActions }: IProps) => {
         // endDate,
         // isCause,
         // isExperience,
-        // cumulativeAmount,
+        cumulativeAmount,
         requestAmount,
         multimedia,
         // status,
@@ -86,6 +88,10 @@ const CampaignCard = ({ data, showActions }: IProps) => {
                     {showActions && <Text lineClamp={3} size="sm">{description}</Text>}
 
                     {/* <Progress value={daysLeft} /> */}
+                    <Progress value={calculatePercentageString(requestAmount.toString(), cumulativeAmount.toString())} size="md" />
+                    <Flex justify="space-between">
+                        <Text fw={500}>{calculatePercentage(requestAmount, cumulativeAmount)}% Reunido</Text>
+                    </Flex>
 
                     <Flex justify="space-between">
                         <Text><b>{formattingToCLPNumber(requestAmount)}</b> recaudados</Text>

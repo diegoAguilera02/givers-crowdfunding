@@ -1,20 +1,14 @@
 import { Helmet } from "react-helmet";
 import {
-    // ActionIcon,
-    // Alert,
-    Anchor,
     Box,
     Button,
     Card,
     Checkbox,
     Container,
     Flex,
-    Group,
     NumberInput,
     Paper,
     PaperProps,
-    Radio,
-    SegmentedControl,
     SimpleGrid,
     Stack,
     Text,
@@ -23,23 +17,27 @@ import {
     TitleProps,
     useMantineTheme
 } from "@mantine/core";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { DateInput } from "@mantine/dates";
-import { CategorySelect, CurrencySelect, FileDropzone } from "../components";
+import { CategorySelect, FileDropzone } from "../../components";
 
 import { Link as LinkRouter } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import FoundationSelect from "../components/FoundationSelect";
+import FoundationSelect from "../../components/FoundationSelect";
 
 import * as yup from 'yup';
 import { IconCalendar, IconCurrencyDollar } from "@tabler/icons-react";
-import { addCampaign } from "../firebase/service";
+import { addCampaign } from "../../firebase/service";
+import GiversLayout from "../../layout/GiversLayout";
+import ResponsibleSelect from "../../components/ResponsibleSelect";
+import { AuthContext } from "../../context/auth/AuthContext";
 
 const validationCampaignSchema = yup.object().shape({
     name: yup.string().required('El nombre de la campaña es requerido'),
     description: yup.string().required('La descripción de la campaña es requerida'),
     category: yup.string().required('La categoría de la campaña es requerida'),
     foundation: yup.string().required('La fundación de la campaña es requerida'),
+    responsible: yup.string().required('El responsable de la campaña es requerido'),
     initDate: yup.string().required('La fecha de inicio de la campaña es requerida'),
     finishDate: yup.string().required('La fecha de finalización de la campaña es requerida'),
     isCause: yup.boolean().required('El tipo de campaña es requerido'),
@@ -50,13 +48,17 @@ const validationCampaignSchema = yup.object().shape({
 
 const CreateCampaignPage = () => {
 
+
+    const { user } = useContext(AuthContext);
+
     const navigate = useNavigate();
 
-    const [formValues, setFormValues] = useState<{ name: string; description: string; requestAmount: number; category: string; foundation: string; initDate: Date; finishDate: Date; isCause: boolean; isExperience: boolean, multimediaCount: number }>({
+    const [formValues, setFormValues] = useState<{ name: string; description: string; requestAmount: number; category: string; foundation: string; responsible: string; initDate: Date; finishDate: Date; isCause: boolean; isExperience: boolean, multimediaCount: number }>({
         name: '',
         description: '',
         category: '',
         foundation: '',
+        responsible: '',
         initDate: null,
         finishDate: null,
         isCause: false,
@@ -105,6 +107,12 @@ const CreateCampaignPage = () => {
         setFormValues({ ...formValues, foundation: value });
     }
 
+    const updateResponsible = (value: string) => {
+        if (!value) return setFormValues({ ...formValues, responsible: '' });
+
+        setFormValues({ ...formValues, responsible: value });
+    }
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.currentTarget;
         setFormValues({
@@ -115,6 +123,7 @@ const CreateCampaignPage = () => {
 
     const onCreateCampaign = async () => {
 
+        console.log(error);
         const isValid = await isValidForm();
 
         if (isValid) {
@@ -130,6 +139,8 @@ const CreateCampaignPage = () => {
                 isExperience: formValues.isExperience,
                 requestAmount: formValues.requestAmount,
                 multimedia: files,
+                responsible: formValues.responsible,
+                createdBy: user.uid,
             }
 
             const response = await addCampaign(campaignData);
@@ -162,7 +173,7 @@ const CreateCampaignPage = () => {
     }
 
     return (
-        <>
+        <GiversLayout>
             <Helmet>
                 <title>Crear Campaña</title>
             </Helmet>
@@ -173,7 +184,7 @@ const CreateCampaignPage = () => {
                     <div>
                         <Title {...titleProps}>Información Campaña</Title>
                         <Paper {...paperProps}>
-                            <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+                            <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]} style={{ marginBottom: 20 }}>
                                 <TextInput
                                     label="Nombre"
                                     name="name"
@@ -193,6 +204,8 @@ const CreateCampaignPage = () => {
                                 <CategorySelect errorCategory={errorMessages.category} handleSelectCategory={updateCategory} />
                                 <FoundationSelect errorFoundation={errorMessages.foundation} handleSelectFoundation={updateFoundation} />
                             </SimpleGrid>
+
+                            <ResponsibleSelect errorResponsible={errorMessages.responsible} handleSelectResponsible={updateResponsible} />
 
                             <SimpleGrid cols={2} style={{ marginTop: 25 }} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
                                 <Checkbox
@@ -229,7 +242,10 @@ const CreateCampaignPage = () => {
 
                                         <DateInput
                                             value={deadlineDate}
-                                            onChange={(value) => setFormValues({ ...formValues, finishDate: value })}
+                                            onChange={(value) => {
+                                                setFormValues({ ...formValues, finishDate: value })
+                                                setDeadlineDate(value)
+                                            }}
                                             label="Fecha final campaña"
                                             placeholder="Fecha final"
                                             lang="es"
@@ -288,7 +304,7 @@ const CreateCampaignPage = () => {
                     </div>
                 </Container>
             </Box>
-        </>
+        </GiversLayout>
     );
 };
 

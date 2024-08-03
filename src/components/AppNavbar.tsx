@@ -192,12 +192,6 @@ const AppNavbar = ({ ...others }: IProps) => {
                             <AppLinks className={classes.hiddenMobile} />
                         </Group>
                         <Group>
-                            <ActionIcon variant="filled" color={theme.white} onClick={toggleSearchDrawer}>
-                                <IconSearch size={ICON_SIZE} />
-                            </ActionIcon>
-                            <ActionIcon variant="filled" color={theme.white}>
-                                <IconBell size={ICON_SIZE} />
-                            </ActionIcon>
                             <Menu
                                 width={260}
                                 position="bottom-end"
@@ -228,32 +222,6 @@ const AppNavbar = ({ ...others }: IProps) => {
                                     </UnstyledButton>
                                 </Menu.Target>
                                 <Menu.Dropdown>
-                                    <Menu.Item
-                                        icon={<IconHeart
-                                            size="0.9rem"
-                                            color={theme.colors.red[6]}
-                                            stroke={1.5}
-                                        />}
-                                    >
-                                        Publicaciones Gustadas
-                                    </Menu.Item>
-                                    <Menu.Item
-                                        icon={<IconStar
-                                            size="0.9rem"
-                                            color={theme.colors.yellow[6]}
-                                            stroke={1.5} />}
-                                    >
-                                        Publicaciones Guardadas
-                                    </Menu.Item>
-                                    <Menu.Item
-                                        icon={<IconMessage
-                                            size="0.9rem"
-                                            color={theme.colors.blue[6]}
-                                            stroke={1.5} />}
-                                    >
-                                        Tus Comentarios
-                                    </Menu.Item>
-
                                     <Menu.Label>Ajustes</Menu.Label>
                                     <Menu.Item icon={<IconSettings size="0.9rem" stroke={1.5} />}>
                                         Ajustes de Cuenta

@@ -1,5 +1,4 @@
 import { Box, BoxProps, Container, Flex, Select, SimpleGrid, Stack, TextInput, Title, TitleProps } from "@mantine/core";
-import campaignsData from "../data/Campaigns.json";
 import { CampaignCard } from "../components";
 import { Helmet } from "react-helmet";
 import { useMediaQuery } from "@mantine/hooks";

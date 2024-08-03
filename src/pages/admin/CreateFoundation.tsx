@@ -1,24 +1,13 @@
 import { Helmet } from "react-helmet";
 import {
-    ActionIcon,
-    Alert,
-    Anchor,
     Box,
     Button,
     Card,
-    Checkbox,
     Container,
     Flex,
-    Group,
-    NumberInput,
     Paper,
     PaperProps,
-    Radio,
-    SegmentedControl,
-    Select,
     SimpleGrid,
-    Stack,
-    Stepper,
     Text,
     TextInput,
     Title,
@@ -30,16 +19,17 @@ import { useState } from "react";
 import {
     IconPlus
 } from "@tabler/icons-react";
-import { CountrySelect } from "../components";
+import { CountrySelect } from "../../components";
 
 import { Link as LinkRouter, useNavigate } from "react-router-dom";
 
-import GooglePlace from "../components/Place";
-import ConfidenceSelect from "../components/ConfidenceSelect";
+import GooglePlace from "../../components/Place";
+import ConfidenceSelect from "../../components/ConfidenceSelect";
 
 import * as yup from "yup";
-import { addFoundation } from "../firebase/service";
-import ResponsibleSelect from "../components/ResponsibleSelect";
+import { addFoundation } from "../../firebase/service";
+import ResponsibleSelect from "../../components/ResponsibleSelect";
+import GiversLayout from "../../layout/GiversLayout";
 
 const validationFoundationSchema = yup.object().shape({
     name: yup.string().required('El nombre es requerido'),
@@ -134,13 +124,15 @@ const CreateFoundationPage = () => {
 
     const onCreateFoundation = async () => {
 
+        console.log(error);
+
         const isValid = await isValidForm();
 
         if (isValid) {
             // Format data
             const foundationData = {
                 name: formValues.name,
-                country: formValues.country,
+                country: countrySelect,
                 city: formValues.city,
                 address: formValues.address,
                 lat: formValues.lat,
@@ -174,7 +166,7 @@ const CreateFoundationPage = () => {
         }
     }
     return (
-        <>
+        <GiversLayout>
             <Helmet>
                 <title>Crear Fundación</title>
             </Helmet>
@@ -343,7 +335,7 @@ const CreateFoundationPage = () => {
                     </div>
                 </Container>
             </Box>
-        </>
+        </GiversLayout>
     );
 };
 
