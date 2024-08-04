@@ -52,9 +52,7 @@ export const registerUserWithEmailAndPassword = async (name: string, email: stri
     try {
         const response = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
 
-        console.log(response);
         const { uid, photoURL } = response.user;
-
 
         await updateProfile(FirebaseAuth.currentUser, {
             displayName: name
@@ -77,7 +75,7 @@ export const registerUserWithEmailAndPassword = async (name: string, email: stri
 export const loginWithEmailAndPassword = async (email: string, password: string): Promise<AuthResult> => {
     try {
         const response = await signInWithEmailAndPassword(FirebaseAuth, email, password);
-        console.log(response);
+   
         const { displayName, email: userEmail, uid, photoURL } = response.user;
         return {
             success: true,

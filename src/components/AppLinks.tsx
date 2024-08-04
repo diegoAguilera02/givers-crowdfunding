@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Button, createStyles, Flex, FlexProps, getStylesRef, rem } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconDoorExit, IconFolderPlus, IconHome, IconUser, IconUserOff, IconUserPlus, } from '@tabler/icons-react';
+import { IconDoorExit, IconFolderPlus, IconHome, IconUser, IconUserPlus, } from '@tabler/icons-react';
 import { Link } from "react-router-dom";
 import { AuthContext } from '../context/auth/AuthContext';
 

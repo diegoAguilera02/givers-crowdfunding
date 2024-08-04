@@ -143,7 +143,7 @@ const CreateFoundationPage = () => {
             }
 
             const response = await addFoundation(foundationData);
-            console.log(response);
+
             if (!response.success) return setError('ocurrió un error al crear la fundación');
 
             // Redirect to dashboard

@@ -46,7 +46,6 @@ const CampaignsPage = (): JSX.Element => {
             try {
                 const campaigns = await chargedCampaigns();
                 setCampaigns(campaigns);
-                console.log('finish');
                 setLoading(false);
             } catch (error) {
                 // Manejar errores aquí, por ejemplo, establecer un estado de error

@@ -27,8 +27,6 @@ import { IconFlag, IconSeparator, IconShare } from "@tabler/icons-react";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { BackButton, DonationDrawer, ShareModal, UserCard } from "../components";
 import { Helmet } from "react-helmet";
-import * as dayjs from "dayjs";
-import * as LocalizedFormat from "dayjs/plugin/localizedFormat"
 import { Campaign } from "../interfaces/Campaign";
 import { getCampaign } from "../firebase/service";
 import { formattingToCLPNumber } from "../helpers/formatCurrency";
@@ -39,7 +37,6 @@ import GiversLayout from "../layout/GiversLayout";
 import GiversLayoutGuest from "../layout/GiversLayoutGuest";
 
 const CampaignDetailsPage = (): JSX.Element => {
-    dayjs.extend(LocalizedFormat)
     const { user } = useContext(AuthContext);
     const { id } = useParams();
     const [campaign, setCampaign] = useState<Campaign>();

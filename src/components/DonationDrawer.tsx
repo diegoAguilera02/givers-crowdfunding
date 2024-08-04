@@ -89,7 +89,6 @@ const DonationDrawer = ({ campaign, iconSize, ...others }: IProps) => {
         const isValid = isValidForm();
         if(!isValid){
             console.log('Formulario enviado');
-
             // Call API
             // window.location.href = import.meta.env.VITE_API_URL_TRANSBANK_CREATE2 as string;
         }
